@@ -1,15 +1,18 @@
 import { ThreeEvent } from '@react-three/fiber';
 import React, { ReactNode, useState } from 'react';
+import { Intersection, Mesh } from 'three';
 
 // This is the interface for the context
 interface GameEngineContextType {
   board: (number | null)[][];
+  setBoard: (newBoard: (number | null)[][]) => void;
   updateBoard: (clickEvent: ThreeEvent<MouseEvent>) => void;
 }
 
 // Instantiate the board game context
 const GameEngineContext = React.createContext<GameEngineContextType>({
   board: [],
+  setBoard: (_: (number | null)[][]) => {},
   updateBoard: (_: ThreeEvent<MouseEvent>) => {}
 });
 
@@ -22,6 +25,11 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number }> = ({ chil
 
   // Create a function which updates the board
   function updateBoard(clickEvent: ThreeEvent<MouseEvent>) {
+
+    // Don't update if clicking step cube
+    if (clickEvent.intersections.some((intersection: Intersection) => intersection.object.name === "StepCube")) {
+      return;
+    }
 
     // Get the cubes position from the click event
     const { x, z } = clickEvent.intersections[0].point;
@@ -39,7 +47,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number }> = ({ chil
   }
 
   return (
-    <GameEngineContext.Provider value={{ board, updateBoard }}>
+    <GameEngineContext.Provider value={{ board, setBoard, updateBoard }}>
       {children}
     </GameEngineContext.Provider>
   );
