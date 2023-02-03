@@ -1,6 +1,6 @@
 import { ThreeEvent } from '@react-three/fiber';
 import React, { ReactNode, useState } from 'react';
-import { Intersection, Mesh } from 'three';
+import { Intersection } from 'three';
 
 // This is the interface for the context
 interface GameEngineContextType {
