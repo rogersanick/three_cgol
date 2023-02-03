@@ -6,14 +6,14 @@ import { Intersection } from 'three';
 interface GameEngineContextType {
   board: (number | null)[][];
   setBoard: (newBoard: (number | null)[][]) => void;
-  updateBoard: (clickEvent: ThreeEvent<MouseEvent>) => void;
+  updateBoard: (clickEvent: ThreeEvent<MouseEvent>, playerNumber: number) => void;
 }
 
 // Instantiate the board game context
 const GameEngineContext = React.createContext<GameEngineContextType>({
   board: [],
   setBoard: (_: (number | null)[][]) => {},
-  updateBoard: (_: ThreeEvent<MouseEvent>) => {}
+  updateBoard: (_: ThreeEvent<MouseEvent>, __: number) => {}
 });
 
 const GameEngine: React.FC<{ children: ReactNode, boardSize: number }> = ({ children, boardSize }) => {
@@ -24,7 +24,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number }> = ({ chil
   );
 
   // Create a function which updates the board
-  function updateBoard(clickEvent: ThreeEvent<MouseEvent>) {
+  function updateBoard(clickEvent: ThreeEvent<MouseEvent>, playerNumber: number) {
 
     // Don't update if clicking step cube
     if (clickEvent.intersections.some((intersection: Intersection) => intersection.object.name === "StepCube")) {
@@ -38,10 +38,10 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number }> = ({ chil
     const cubeXIndex = adjustedX + boardSize / 2;
     const cubeZIndex = adjustedZ + boardSize / 2;
 
-    if (!board[cubeXIndex][cubeZIndex]) {
+    if (board[cubeXIndex][cubeZIndex] === null) {
       // Update the cube positions
       const newBoard = duplicateArrayOfArrays(board);
-      newBoard[cubeXIndex][cubeZIndex] = 1;
+      newBoard[cubeXIndex][cubeZIndex] = playerNumber;
       setBoard(newBoard);
     }
   }
