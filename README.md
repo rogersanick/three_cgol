@@ -1,8 +1,6 @@
-# React Three Fiber + Vite Starter
+# Decay
 
-_A simple React Three Fiber + Vite starter with an import-ready CodeSandbox config._
-
-![Preview](/public/preview.gif)
+_A deck building board game based on Conway's Game of Life._
 
 ### Resources:
 
@@ -26,5 +24,3 @@ npm run build
 npm run preview
 npm run sandbox
 ```
-### CodeSandbox
-To create a sandbox from this starter, [import your repository URL](https://codesandbox.io/dashboard/repositories) (this repo works too), or [fork this template](https://codesandbox.io/s/react-three-fiber-vite-starter-r1tgld).
