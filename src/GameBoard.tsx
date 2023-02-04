@@ -3,7 +3,6 @@ import { ThreeEvent } from "@react-three/fiber";
 import { Suspense, useContext, useEffect, useState } from "react";
 import { Intersection } from "three";
 import { GameEngineContext } from "./GameEngineContext";
-import gameOfLifeTransition from "./GamePhases";
 import GelatinousCube from "./GelatinousCube";
 import Slime from "./Slime";
 
@@ -21,7 +20,7 @@ const color = [
 const GameBoard = () => {
 
   // State of the board game from context
-  const { gelatinousCubes, setGelatinousCubes, addGelatinousCube } = useContext(GameEngineContext);
+  const { gelatinousCubes, slimePaths, applyCgol, addGelatinousCube } = useContext(GameEngineContext);
   const [ currentPlayerNumber, setCurrentPlayerNumber ] = useState(0);
   const boardSize = gelatinousCubes.length;
 
@@ -41,11 +40,6 @@ const GameBoard = () => {
     }
   }, [currentPlayerNumber])
 
-  // Handle changing game state
-  const handleCgolProgressGeneration = () => { 
-    setGelatinousCubes(gameOfLifeTransition(gelatinousCubes)) 
-  }
-
   // Handle adding a cube
   const handleAddGelatinousCube = (clickEvent: ThreeEvent<MouseEvent>) => {
     // Don't update if clicking step cube
@@ -61,7 +55,7 @@ const GameBoard = () => {
   return (
     <>
       <Suspense>
-        <RoundedBox name={"StepCube"} onClick={handleCgolProgressGeneration} args={[1, 1, 1]} position={[0,5,0]}>
+        <RoundedBox name={"StepCube"} onClick={applyCgol} args={[1, 1, 1]} position={[0,5,0]}>
           <meshStandardMaterial color={"red"} />
         </RoundedBox>
         <RoundedBox name={"StepCube"} onClick={handleChangePlayer} args={[1, 1, 1]} position={[3,5,0]}>
@@ -71,16 +65,13 @@ const GameBoard = () => {
         {
           gelatinousCubes.map((row, rowIndex) => {
             return row.map((cubePlayerNumber, columnIndex) => {
-              if (cubePlayerNumber !== null) {
-                const cubeXIndex = rowIndex - boardSize / 2;
-                const cubeZIndex = columnIndex - boardSize / 2;
-                return <>
-                  <GelatinousCube playerNumber={cubePlayerNumber} key={`Cube X:${cubeXIndex}Z:${cubeZIndex}`} position={[cubeXIndex, 0.3, cubeZIndex]}/>
-                  <Slime playerNumber={cubePlayerNumber} key={`Slime X:${cubeXIndex}Z:${cubeZIndex}`} position={[cubeXIndex, -0.35, cubeZIndex]}></Slime>
-                </>
-              } else {
-                return null;
-              }
+              const slimePlayerNumber = slimePaths[rowIndex][columnIndex];
+              const cubeXIndex = rowIndex - boardSize / 2;
+              const cubeZIndex = columnIndex - boardSize / 2;
+              return <group key={`Cube Slime:${cubeXIndex}Z:${cubeZIndex}`}>
+                {cubePlayerNumber ? <GelatinousCube playerNumber={cubePlayerNumber} key={`Cube X:${cubeXIndex}Z:${cubeZIndex}`} position={[cubeXIndex, 0.3, cubeZIndex]}/> : null }
+                {slimePlayerNumber ? <Slime playerNumber={slimePlayerNumber} key={`Slime X:${cubeXIndex}Z:${cubeZIndex}`} position={[cubeXIndex, -0.35, cubeZIndex]}/> : null }
+              </group>
             })
           })
         }

@@ -1,4 +1,4 @@
-function gameOfLifeTransition(board: (number | null)[][]): (number | null)[][] {
+function cgolGelatinousCubeTransition(board: (number | null)[][]): (number | null)[][] {
   // Create a copy of the original board to avoid modifying it in place
   const newBoard = board.map(row => row.slice());
 
@@ -43,4 +43,19 @@ function gameOfLifeTransition(board: (number | null)[][]): (number | null)[][] {
   return newBoard;
 }
 
-export default gameOfLifeTransition;
+function cgolSlimePathTransition(gelatinousCubes: (number | null)[][], slimePaths: (number | null)[][]): (number | null)[][] {
+    for (let row = 0; row < slimePaths.length; row++) {
+        for (let col = 0; col < slimePaths[0].length; col++) {
+            const cube = gelatinousCubes[row][col];
+            const slimePath = slimePaths[row][col];
+            if (cube !== null) {
+                if (cube !== slimePath) {
+                    slimePaths[row][col] = cube;
+                }
+            }
+        }
+    }
+    return slimePaths;
+}
+
+export { cgolGelatinousCubeTransition, cgolSlimePathTransition };

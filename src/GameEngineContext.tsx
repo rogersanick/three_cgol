@@ -1,38 +1,44 @@
-import { ThreeEvent } from '@react-three/fiber';
 import React, { ReactNode, useState } from 'react';
-import { Intersection } from 'three';
+import { cgolGelatinousCubeTransition, cgolSlimePathTransition } from './GamePhases';
 
 // This is the interface for the context
 interface GameEngineContextType {
   gelatinousCubes: (number | null)[][];
-  setGelatinousCubes: (newBoard: (number | null)[][]) => void;
+  applyCgol: () => void;
   addGelatinousCube: (x: number, y: number, playerNumber: number) => void;
+  slimePaths: (number | null)[][];
 }
 
 // Instantiate the board game context
 const GameEngineContext = React.createContext<GameEngineContextType>({
   gelatinousCubes: [],
-  setGelatinousCubes: (_: (number | null)[][]) => {},
-  addGelatinousCube: (_: number, __: number, ___: number) => {}
+  applyCgol: () => {},
+  addGelatinousCube: (_: number, __: number, ___: number) => {},
+  slimePaths: []
 });
 
 const GameEngine: React.FC<{ children: ReactNode, boardSize: number }> = ({ children, boardSize }) => {
 
-  // Build the starting board
+  // Build the representation of gelatinousCubes
   const [gelatinousCubes, setGelatinousCubes] = useState<(number | null)[][]>(
     Array.from({ length: boardSize }, () => Array.from({ length: boardSize }, () => null))
   );
+  
+  // Build the representation of slimePaths
+  const [slimePaths, setSlimePaths] = useState<(number | null)[][]>(
+    Array.from({ length: boardSize }, () => Array.from({ length: boardSize }, () => null))
+  );
 
+  // Handle the progression of CGOl for Gelatinous Cubes
+  const applyCgol = () => { 
+    const newGelatinousCubes = cgolGelatinousCubeTransition(gelatinousCubes)
+    setGelatinousCubes(newGelatinousCubes) 
+    const newSlimePaths = cgolSlimePathTransition(newGelatinousCubes, slimePaths)
+    setSlimePaths(newSlimePaths)
+  }
+  
   // Create a function which updates the board
   function addGelatinousCube(x: number, z: number, playerNumber: number) {
-
-    // // Don't update if clicking step cube
-    // if (clickEvent.intersections.some((intersection: Intersection) => intersection.object.name === "StepCube")) {
-    //   return;
-    // }
-
-    // // Get the cubes position from the click event
-    // const { x, z } = clickEvent.intersections[0].point;
     const adjustedX = Math.round(x);
     const adjustedZ = Math.round(z);
     const cubeXIndex = adjustedX + boardSize / 2;
@@ -47,7 +53,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number }> = ({ chil
   }
 
   return (
-    <GameEngineContext.Provider value={{ gelatinousCubes: gelatinousCubes, setGelatinousCubes, addGelatinousCube }}>
+    <GameEngineContext.Provider value={{ gelatinousCubes, applyCgol, addGelatinousCube, slimePaths }}>
       {children}
     </GameEngineContext.Provider>
   );
