@@ -23,7 +23,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number }> = ({ chil
   const [gelatinousCubes, setGelatinousCubes] = useState<(number | null)[][]>(
     Array.from({ length: boardSize }, () => Array.from({ length: boardSize }, () => null))
   );
-  
+
   // Build the representation of slimePaths
   const [slimePaths, setSlimePaths] = useState<(number | null)[][]>(
     Array.from({ length: boardSize }, () => Array.from({ length: boardSize }, () => null))
@@ -45,10 +45,15 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number }> = ({ chil
     const cubeZIndex = adjustedZ + boardSize / 2;
 
     if (gelatinousCubes[cubeXIndex][cubeZIndex] === null) {
-      // Update the cube positions
+      // Update gelatinous cubes
       const newBoard = duplicateArrayOfArrays(gelatinousCubes);
       newBoard[cubeXIndex][cubeZIndex] = playerNumber;
       setGelatinousCubes(newBoard);
+      
+      // Update slime paths
+      const newSlimePaths = duplicateArrayOfArrays(slimePaths);
+      newSlimePaths[cubeXIndex][cubeZIndex] = playerNumber;
+      setSlimePaths(newSlimePaths);
     }
   }
 

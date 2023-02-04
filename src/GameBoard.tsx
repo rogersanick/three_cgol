@@ -69,8 +69,8 @@ const GameBoard = () => {
               const cubeXIndex = rowIndex - boardSize / 2;
               const cubeZIndex = columnIndex - boardSize / 2;
               return <group key={`Cube Slime:${cubeXIndex}Z:${cubeZIndex}`}>
-                {cubePlayerNumber ? <GelatinousCube playerNumber={cubePlayerNumber} key={`Cube X:${cubeXIndex}Z:${cubeZIndex}`} position={[cubeXIndex, 0.3, cubeZIndex]}/> : null }
-                {slimePlayerNumber ? <Slime playerNumber={slimePlayerNumber} key={`Slime X:${cubeXIndex}Z:${cubeZIndex}`} position={[cubeXIndex, -0.35, cubeZIndex]}/> : null }
+                {cubePlayerNumber !== null ? <GelatinousCube playerNumber={cubePlayerNumber} key={`Cube X:${cubeXIndex}Z:${cubeZIndex}`} position={[cubeXIndex, 0.3, cubeZIndex]}/> : null }
+                {slimePlayerNumber !== null ? <Slime playerNumber={slimePlayerNumber} key={`Slime X:${cubeXIndex}Z:${cubeZIndex}`} position={[cubeXIndex, -0.35, cubeZIndex]}/> : null }
               </group>
             })
           })
