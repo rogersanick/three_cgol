@@ -1,16 +1,6 @@
 import { RoundedBox } from "@react-three/drei"
 import React from "react"
-
-const color = [
-  "#FFB347",
-  "#77DD77",
-  "#FDFD96",
-  "#B19CD9",
-  "#FF6961",
-  "#87CEEB",
-  "#7EC0EE",
-  "#F49AC2"
-]
+import { colors } from "./color"
 
 const GelatinousCube = (props: { 
   playerNumber: number,
@@ -39,9 +29,9 @@ const GelatinousCube = (props: {
     ior: 2,
   }
   return (
-    <group dispose={null} position={position} scale={config.scale}>
-      <RoundedBox args={[1,0.5,1]}>
-        <meshPhysicalMaterial color={color[playerNumber]} {...config} />
+    <group position={position} scale={config.scale}>
+      <RoundedBox args={[1,1,1]}>
+        <meshPhysicalMaterial color={colors[playerNumber]} {...config} />
       </RoundedBox>
     </group>
   )

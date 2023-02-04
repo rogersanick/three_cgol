@@ -1,8 +1,11 @@
 import { Grid, Plane, RoundedBox } from "@react-three/drei";
+import { ThreeEvent } from "@react-three/fiber";
 import { Suspense, useContext, useEffect, useState } from "react";
+import { Intersection } from "three";
 import { GameEngineContext } from "./GameEngineContext";
 import gameOfLifeTransition from "./GamePhases";
 import GelatinousCube from "./GelatinousCube";
+import Slime from "./Slime";
 
 const color = [
   "#FFB347",
@@ -16,10 +19,13 @@ const color = [
 ]
 
 const GameBoard = () => {
-  const { board, setBoard, updateBoard } = useContext(GameEngineContext);
-  const [ currentPlayerNumber, setCurrentPlayerNumber ] = useState(0);
-  const boardSize = board.length;
 
+  // State of the board game from context
+  const { gelatinousCubes, setGelatinousCubes, addGelatinousCube } = useContext(GameEngineContext);
+  const [ currentPlayerNumber, setCurrentPlayerNumber ] = useState(0);
+  const boardSize = gelatinousCubes.length;
+
+  // Handle the player input
   const handleChangePlayerKeyBoardInput = (e: KeyboardEvent) => { if (e.key === "Shift") { 
     setCurrentPlayerNumber((currentPlayerNumber + 1) % 8) 
   }};
@@ -35,10 +41,27 @@ const GameBoard = () => {
     }
   }, [currentPlayerNumber])
 
+  // Handle changing game state
+  const handleCgolProgressGeneration = () => { 
+    setGelatinousCubes(gameOfLifeTransition(gelatinousCubes)) 
+  }
+
+  // Handle adding a cube
+  const handleAddGelatinousCube = (clickEvent: ThreeEvent<MouseEvent>) => {
+    // Don't update if clicking step cube
+    if (clickEvent.intersections.some((intersection: Intersection) => intersection.object.name === "StepCube")) {
+      return;
+    }
+
+    // Get the cubes position from the click event
+    const { x, z } = clickEvent.intersections[0].point;
+    addGelatinousCube(x, z, currentPlayerNumber);
+  }
+
   return (
     <>
       <Suspense>
-        <RoundedBox name={"StepCube"} onClick={() => { setBoard(gameOfLifeTransition(board)) }} args={[1, 1, 1]} position={[0,5,0]}>
+        <RoundedBox name={"StepCube"} onClick={handleCgolProgressGeneration} args={[1, 1, 1]} position={[0,5,0]}>
           <meshStandardMaterial color={"red"} />
         </RoundedBox>
         <RoundedBox name={"StepCube"} onClick={handleChangePlayer} args={[1, 1, 1]} position={[3,5,0]}>
@@ -46,19 +69,22 @@ const GameBoard = () => {
         </RoundedBox>
         <Grid args={[boardSize, boardSize]} position={[-0.5, -0.45, -0.5]} cellSize={1} cellColor="white" />
         {
-          board.map((row, rowIndex) => {
+          gelatinousCubes.map((row, rowIndex) => {
             return row.map((cubePlayerNumber, columnIndex) => {
               if (cubePlayerNumber !== null) {
                 const cubeXIndex = rowIndex - boardSize / 2;
                 const cubeZIndex = columnIndex - boardSize / 2;
-                return  <GelatinousCube playerNumber={cubePlayerNumber} key={`X:${cubeXIndex}Z:${cubeZIndex}`} position={[cubeXIndex, -0.25, cubeZIndex]}/>
+                return <>
+                  <GelatinousCube playerNumber={cubePlayerNumber} key={`Cube X:${cubeXIndex}Z:${cubeZIndex}`} position={[cubeXIndex, 0.3, cubeZIndex]}/>
+                  <Slime playerNumber={cubePlayerNumber} key={`Slime X:${cubeXIndex}Z:${cubeZIndex}`} position={[cubeXIndex, -0.35, cubeZIndex]}></Slime>
+                </>
               } else {
                 return null;
               }
             })
           })
         }
-        <Plane name={"GameBoard"} args={[boardSize, boardSize]} onClick={(e) => updateBoard(e, currentPlayerNumber)} rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, -0.5, -0.5]} receiveShadow/>
+        <Plane name={"GameBoard"} args={[boardSize, boardSize]} onClick={(e) => handleAddGelatinousCube(e)} rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, -0.5, -0.5]} receiveShadow/>
       </Suspense>
     </>
   );

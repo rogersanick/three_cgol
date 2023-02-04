@@ -32,7 +32,7 @@ function gameOfLifeTransition(board: (number | null)[][]): (number | null)[][] {
               }
           } else if (liveNeighborsCount === 3) {
               // Get max from live neighbors
-              // TODO: Handle ties
+              // TODO: Handle ties, what happens if there are two or more types of live neighbors with the same number of live neighbors?
               const mostFrequentLiveNeighborType = Object.keys(liveNeighbors).reduce((a, b) => liveNeighbors[a] > liveNeighbors[b] ? a : b);
               newBoard[row][col] = parseInt(mostFrequentLiveNeighborType);
           }

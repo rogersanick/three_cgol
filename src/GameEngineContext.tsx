@@ -4,50 +4,50 @@ import { Intersection } from 'three';
 
 // This is the interface for the context
 interface GameEngineContextType {
-  board: (number | null)[][];
-  setBoard: (newBoard: (number | null)[][]) => void;
-  updateBoard: (clickEvent: ThreeEvent<MouseEvent>, playerNumber: number) => void;
+  gelatinousCubes: (number | null)[][];
+  setGelatinousCubes: (newBoard: (number | null)[][]) => void;
+  addGelatinousCube: (x: number, y: number, playerNumber: number) => void;
 }
 
 // Instantiate the board game context
 const GameEngineContext = React.createContext<GameEngineContextType>({
-  board: [],
-  setBoard: (_: (number | null)[][]) => {},
-  updateBoard: (_: ThreeEvent<MouseEvent>, __: number) => {}
+  gelatinousCubes: [],
+  setGelatinousCubes: (_: (number | null)[][]) => {},
+  addGelatinousCube: (_: number, __: number, ___: number) => {}
 });
 
 const GameEngine: React.FC<{ children: ReactNode, boardSize: number }> = ({ children, boardSize }) => {
 
   // Build the starting board
-  const [board, setBoard] = useState<(number | null)[][]>(
+  const [gelatinousCubes, setGelatinousCubes] = useState<(number | null)[][]>(
     Array.from({ length: boardSize }, () => Array.from({ length: boardSize }, () => null))
   );
 
   // Create a function which updates the board
-  function updateBoard(clickEvent: ThreeEvent<MouseEvent>, playerNumber: number) {
+  function addGelatinousCube(x: number, z: number, playerNumber: number) {
 
-    // Don't update if clicking step cube
-    if (clickEvent.intersections.some((intersection: Intersection) => intersection.object.name === "StepCube")) {
-      return;
-    }
+    // // Don't update if clicking step cube
+    // if (clickEvent.intersections.some((intersection: Intersection) => intersection.object.name === "StepCube")) {
+    //   return;
+    // }
 
-    // Get the cubes position from the click event
-    const { x, z } = clickEvent.intersections[0].point;
+    // // Get the cubes position from the click event
+    // const { x, z } = clickEvent.intersections[0].point;
     const adjustedX = Math.round(x);
     const adjustedZ = Math.round(z);
     const cubeXIndex = adjustedX + boardSize / 2;
     const cubeZIndex = adjustedZ + boardSize / 2;
 
-    if (board[cubeXIndex][cubeZIndex] === null) {
+    if (gelatinousCubes[cubeXIndex][cubeZIndex] === null) {
       // Update the cube positions
-      const newBoard = duplicateArrayOfArrays(board);
+      const newBoard = duplicateArrayOfArrays(gelatinousCubes);
       newBoard[cubeXIndex][cubeZIndex] = playerNumber;
-      setBoard(newBoard);
+      setGelatinousCubes(newBoard);
     }
   }
 
   return (
-    <GameEngineContext.Provider value={{ board, setBoard, updateBoard }}>
+    <GameEngineContext.Provider value={{ gelatinousCubes: gelatinousCubes, setGelatinousCubes, addGelatinousCube }}>
       {children}
     </GameEngineContext.Provider>
   );
