@@ -33,10 +33,10 @@ const GameBoard = () => {
   return (
     <>
       <Suspense>
-        <RoundedBox name={"StepCube"} onClick={() => { setBoard(gameOfLifeTransition(board)) }} args={[1, 1, 1]} position={[0,10,0]}>
+        <RoundedBox name={"StepCube"} onClick={() => { setBoard(gameOfLifeTransition(board)) }} args={[1, 1, 1]} position={[0,5,0]}>
           <meshStandardMaterial color={"red"} />
         </RoundedBox>
-        <RoundedBox name={"StepCube"} onClick={() => { setBoard(gameOfLifeTransition(board)) }} args={[1, 1, 1]} position={[3,10,0]}>
+        <RoundedBox name={"StepCube"} onClick={() => { setBoard(gameOfLifeTransition(board)) }} args={[1, 1, 1]} position={[3,5,0]}>
           <meshStandardMaterial color={color[currentPlayerNumber]} />
         </RoundedBox>
         <Grid args={[boardSize, boardSize]} position={[-0.5, -0.45, -0.5]} cellSize={1} cellColor="white" />
