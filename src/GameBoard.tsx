@@ -20,13 +20,18 @@ const GameBoard = () => {
   const [ currentPlayerNumber, setCurrentPlayerNumber ] = useState(0);
   const boardSize = board.length;
 
+  const handleChangePlayerKeyBoardInput = (e: KeyboardEvent) => { if (e.key === "Shift") { 
+    setCurrentPlayerNumber((currentPlayerNumber + 1) % 8) 
+  }};
+
+  const handleChangePlayer = () => {
+    setCurrentPlayerNumber((currentPlayerNumber + 1) % 8)
+  }
+
   useEffect(() => {
-    const handleChangePlayer = (e: KeyboardEvent) => { if (e.key === "Shift") { 
-      setCurrentPlayerNumber((currentPlayerNumber + 1) % 8) 
-    }};
-    document.addEventListener('keydown', handleChangePlayer)
+    document.addEventListener('keydown', handleChangePlayerKeyBoardInput)
     return () => {
-      document.removeEventListener('keydown', handleChangePlayer)
+      document.removeEventListener('keydown', handleChangePlayerKeyBoardInput)
     }
   }, [currentPlayerNumber])
 
@@ -36,7 +41,7 @@ const GameBoard = () => {
         <RoundedBox name={"StepCube"} onClick={() => { setBoard(gameOfLifeTransition(board)) }} args={[1, 1, 1]} position={[0,5,0]}>
           <meshStandardMaterial color={"red"} />
         </RoundedBox>
-        <RoundedBox name={"StepCube"} onClick={() => { setBoard(gameOfLifeTransition(board)) }} args={[1, 1, 1]} position={[3,5,0]}>
+        <RoundedBox name={"StepCube"} onClick={handleChangePlayer} args={[1, 1, 1]} position={[3,5,0]}>
           <meshStandardMaterial color={color[currentPlayerNumber]} />
         </RoundedBox>
         <Grid args={[boardSize, boardSize]} position={[-0.5, -0.45, -0.5]} cellSize={1} cellColor="white" />
