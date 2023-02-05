@@ -8,7 +8,7 @@ const Scene = () => {
   return (
     <>
       <Suspense>
-        <Environment preset="forest" />
+        <Environment preset="city" />
         <Perf position="top-left"/>
         <GameEngine boardSize={50}>
           <GameBoard />

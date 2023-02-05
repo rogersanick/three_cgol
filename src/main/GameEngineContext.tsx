@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-import { cgolGelatinousCubeTransition, cgolSlimePathTransition } from './GamePhases';
+import { cgolGelatinousCubeTransition, slimePathTransition } from './GamePhases';
 
 // This is the interface for the context
 interface GameEngineContextType {
@@ -33,7 +33,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number }> = ({ chil
   const applyCgol = () => { 
     const newGelatinousCubes = cgolGelatinousCubeTransition(gelatinousCubes)
     setGelatinousCubes(newGelatinousCubes) 
-    const newSlimePaths = cgolSlimePathTransition(newGelatinousCubes, slimePaths)
+    const newSlimePaths = slimePathTransition(newGelatinousCubes, slimePaths)
     setSlimePaths(newSlimePaths)
   }
   
