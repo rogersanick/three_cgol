@@ -96,6 +96,25 @@ describe('cgolGelatinousCubeTransition', () => {
     const result = cgolGelatinousCubeTransition(map);
     expect(result).toEqual(expected);
   });
+
+  it ('applies the appropriate transformation for three cells of three organisms of the same size that should create new life', () => {
+    const map = [
+      [null, null, null, null, null],
+      [null, null, null, 1   , null],
+      [null, null, 3,    2   , null],
+      [null, null, null, null, null],
+      [null, null, null, null, null],
+    ];
+    const expected = [
+      [null, null, null, null, null],
+      [null, null, 3   , 1   , null],
+      [null, null, 3,    2   , null],
+      [null, null, null, null, null],
+      [null, null, null, null, null],
+    ];
+    const result = cgolGelatinousCubeTransition(map);
+    expect(result).toEqual(expected);
+  });
 })
 
 describe('findOrganismSize', () => {

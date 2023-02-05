@@ -34,20 +34,27 @@ function cgolGelatinousCubeTransition(board: (number | null)[][]): (number | nul
               }
           } else if (liveNeighborsCount === 3) {
               const liveNeighborKeys = Object.keys(liveNeighbors);
-              // If there is only one neighboring organism, that is the cell that will spawn
+              // CASE 1: If there is only one neighboring organism, that is the cell that will spawn
               if (liveNeighborKeys.length === 1) {
                 newBoard[row][col] = parseInt(Object.keys(liveNeighbors)[0]);
-              // If there are two neighboring organisms, the cell that spawns is determined by the majority of immediate neighboring cells
+              // CASE 2: If there are two neighboring organisms, the cell that spawns is determined by the majority of immediate neighboring cells
               } else if (liveNeighborKeys.length === 2) {
                 newBoard[row][col] = parseInt(liveNeighborKeys.reduce((a, b) => liveNeighbors[a] > liveNeighbors[b] ? a : b ));
-              // If there are three neighboring organisms, the cell that spawns is determined by the organism with the largest size
-              // This is calculated using Slime, NOT using Game of Life cells
               } else {
                 const neighboringOrganismSizes = neighborCoordinates.reduce((acc, [neighborKey, x, y]) => {
                     acc[neighborKey.toString()] = findOrganismSize(neighborKey, board, x, y);
                     return acc
                 }, {} as { [key: string]: number });
-                 newBoard[row][col] = parseInt(liveNeighborKeys.reduce((a, b) => neighboringOrganismSizes[a] > neighboringOrganismSizes[b] ? a : b ));
+
+                // CASE 3A: If there are three neighboring organisms of equal size, the cell that spawns is the one closest to 0,0
+                const allOrganismSizes = Object.values(neighboringOrganismSizes);
+                if (allOrganismSizes.every(size => size === allOrganismSizes[0])) {
+                    // Find the value closest to 0,0. Return the first element of the storage array representing the key
+                    newBoard[row][col] = findClosestToZeroZero(neighborCoordinates)[0];
+                } else {
+                // CASE 3B: If there are three neighboring organisms, the cell that spawns is determined by the cluster of cells with the largest size
+                    newBoard[row][col] = parseInt(liveNeighborKeys.reduce((a, b) => neighboringOrganismSizes[a] > neighboringOrganismSizes[b] ? a : b ));
+                }
               }
           }
       }
@@ -110,6 +117,22 @@ function findOrganismSize(target: number, board: (number | null)[][], row: numbe
 
     return size;
 }
+
+const findClosestToZeroZero = (coordinates: [number, number, number][]) => {
+    let closestCoordinate: [number, number, number] = coordinates[0];
+    let closestDistance = Number.MAX_SAFE_INTEGER;
+  
+    for (const coordinate of coordinates) {
+      const distance = Math.sqrt(Math.pow(coordinate[1], 2) + Math.pow(coordinate[2], 2));
+      console.log(`distance: ${distance}, cubeType: ${coordinate[0]}`)
+      if (distance < closestDistance) {
+        closestCoordinate = coordinate;
+        closestDistance = distance;
+      }
+    }
+  
+    return closestCoordinate;
+  };
 
 
 
