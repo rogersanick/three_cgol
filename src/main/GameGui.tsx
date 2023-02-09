@@ -7,7 +7,7 @@ import AdaptivePixelRatio from "./AdaptivePixelRatio";
 
 const GameGui = () => {
   return (
-    <Canvas camera={{ fov: 70, position: [50, 30, 50] }}>
+    <Canvas id="three-canvas" className="top-0" camera={{ fov: 70, position: [50, 30, 50] }}>
       <PerformanceMonitor>
         <AdaptivePixelRatio />
         <OrbitControls />
