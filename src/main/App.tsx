@@ -1,17 +1,16 @@
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, PerformanceMonitor } from "@react-three/drei";
-import Scene from "./Scene";
-import AdaptivePixelRatio from "./AdaptivePixelRatio";
+import { PeerConnections } from "./PeerContext";
+import { GameEngine } from "./GameEngineContext";
+import GameGui from "./GameGui";
+import PeerGui from "./PeerGui";
 
 const App = () => {
   return (
-    <Canvas camera={{ fov: 70, position: [50, 30, 50] }}>
-      <PerformanceMonitor>
-        <AdaptivePixelRatio />
-        <OrbitControls />
-        <Scene />
-      </PerformanceMonitor>
-    </Canvas>
+    <PeerConnections>
+      <GameEngine boardSize={50}>
+        <PeerGui />
+        <GameGui />
+      </GameEngine>
+    </PeerConnections>
   );
 };
 

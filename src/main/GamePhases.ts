@@ -41,12 +41,14 @@ function cgolGelatinousCubeTransition(board: (number | null)[][]): (number | nul
               } else if (liveNeighborKeys.length === 2) {
                 newBoard[row][col] = parseInt(liveNeighborKeys.reduce((a, b) => liveNeighbors[a] > liveNeighbors[b] ? a : b ));
               } else {
+
+                // Collect the size of the neighbor, defined as the number of adjacent cells (Gelatinous Cubes)
                 const neighboringOrganismSizes = neighborCoordinates.reduce((acc, [neighborKey, x, y]) => {
                     acc[neighborKey.toString()] = findOrganismSize(neighborKey, board, x, y);
                     return acc
                 }, {} as { [key: string]: number });
 
-                // CASE 3A: If there are three neighboring organisms of equal size, the cell that spawns is the one closest to 0,0
+                // CASE 3A: If there are three neighboring cell groups of equal size, the cell that spawns is the one closest to 0,0
                 const allOrganismSizes = Object.values(neighboringOrganismSizes);
                 if (allOrganismSizes.every(size => size === allOrganismSizes[0])) {
                     // Find the value closest to 0,0. Return the first element of the storage array representing the key

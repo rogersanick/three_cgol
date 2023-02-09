@@ -4,9 +4,9 @@ import { cgolGelatinousCubeTransition, slimePathTransition } from './GamePhases'
 // This is the interface for the context
 interface GameEngineContextType {
   gelatinousCubes: (number | null)[][];
-  applyCgol: () => void;
   addGelatinousCube: (x: number, y: number, playerNumber: number) => void;
   slimePaths: (number | null)[][];
+  applyCgol: () => void;
 }
 
 // Instantiate the board game context
@@ -14,7 +14,7 @@ const GameEngineContext = React.createContext<GameEngineContextType>({
   gelatinousCubes: [],
   applyCgol: () => {},
   addGelatinousCube: (_: number, __: number, ___: number) => {},
-  slimePaths: []
+  slimePaths: [],
 });
 
 const GameEngine: React.FC<{ children: ReactNode, boardSize: number }> = ({ children, boardSize }) => {
