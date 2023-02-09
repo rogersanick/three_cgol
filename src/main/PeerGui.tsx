@@ -13,16 +13,15 @@ const PeerGui: React.FC = () => {
   };
 
   return (
-    <div className="absolute h-screen w-screen z-10">
-      <div className="flex items-center justify-center container mx-auto px-4 font-sans z-20">
-        <form onSubmit={handleSubmit}>
+    <div className="absolute bottom-0 w-screen z-10 flex justify-center">
+      <div className="w-10/12 container bg-gray-100 bg-opacity-75 mx-2 my-2 px-2 py-2 flex flex-col ">
           <input
+            className="bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             type="text"
             value={peerId}
             onChange={(event) => setPeerId(event.target.value)}
           />
-          <button className="rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white" type="submit">Submit</button>
-        </form>
+          <button className="rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white"onClick={handleSubmit}>Submit</button>
         {Object.keys(peerConnections).map((peerId) => (
           <div key={peerId}>{peerId}</div>
         ))}
