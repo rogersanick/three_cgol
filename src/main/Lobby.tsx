@@ -1,4 +1,4 @@
-import { OrbitControls, RoundedBox } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useContext, useState } from "react";
 import GelatinousCube from "./GelatinousCube";
@@ -18,7 +18,7 @@ const Lobby = (props: LobbyProps) => {
   const [transitioning, setTransitioning] = useState(false);
 
   // Adding peers
-  const { peerConnections, addPeer } = useContext(PeerConnectionsContext);
+  const { peerConnections, peerConnectionStatus, addPeer } = useContext(PeerConnectionsContext);
   const [newPeerId, setNewPeerId] = useState("");
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -46,7 +46,10 @@ const Lobby = (props: LobbyProps) => {
       <div className="h-2/6 w-10/12 container rounded bg-gray-100 bg-opacity-75 mx-2 my-2 px-2 py-2 flex flex-col justify-around">
           <div className="max-h-32 h-2/3 overflow-y-auto">
             {Object.keys(peerConnections).map((peerId) => (
-              <div key={peerId}>{peerId}</div>
+              <>
+                <div key={peerId}>{peerId}</div>
+                <div>{peerConnectionStatus[peerId]}</div>
+              </>
             ))}
           </div>
           <div className="h-2/5 container flex flex-col">
