@@ -1,24 +1,15 @@
-import { Environment, OrbitControls, PerformanceMonitor } from "@react-three/drei";
-import { Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
-import { Perf } from 'r3f-perf';
-import GameBoard from "./GameBoard";
-import AdaptivePixelRatio from "./AdaptivePixelRatio";
+import React, { useState } from 'react';
 
-const GameGui = () => {
+const GameGui: React.FC = () => {
+  const [open, setOpen] = useState(true);
   return (
-    <Canvas id="three-canvas" className="top-0" camera={{ fov: 70, position: [50, 30, 50] }}>
-      <PerformanceMonitor>
-        <AdaptivePixelRatio />
-        <OrbitControls />
-        <Suspense>
-          <Environment preset="city" />
-          <Perf position="top-left"/>
-          <GameBoard />
-        </Suspense>
-        <ambientLight />
-      </PerformanceMonitor>
-    </Canvas>
+    <div className={`transition-all ${open ? "" : "translate-x-full"} absolute bottom-0 w-screen z-10 h-1/6 flex justify-center content-between`}>
+      <div className="w-10/12 container rounded bg-gray-100 bg-opacity-75 mx-2 my-2 px-2 py-2 flex flex-col justify-around">
+          <button className='w-4 h-4 border-gray-300 bg-gray-500 rounded-full text-white self-end text-xs text-center' onClick={() => setOpen(false)}>x</button>
+          <div>I will be a GUI some day</div>
+      </div>
+    </div>
+
   );
 };
 

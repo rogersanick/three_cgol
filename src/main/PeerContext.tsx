@@ -19,7 +19,10 @@ const PeerConnectionsContext = React.createContext<PeerConnectionsContextType>({
 
 const PeerConnections: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [ peerClient ] = useState<Peer>(new Peer());
-  const [ id ] = useState<string>(peerClient.id);
+  const [ id, setId ] = useState<string>('UNKNOWN');
+  peerClient.on('open', (id) => {
+    setId(id);
+  });
   const [ peerConnections, setPeerConnections ] = useState<{[key: string]: DataConnection}>({});
 
   // Add a peer

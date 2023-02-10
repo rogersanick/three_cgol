@@ -5,16 +5,21 @@ import { colors } from "./color"
 const GelatinousCube = (props: { 
   playerNumber: number,
   position: [number, number, number]
+  transparent?: boolean
 }) => {
-  const [materialConfig] = useState({
+  const { playerNumber, position, transparent } = props
+  const checkTransparent = transparent == null ? transparent : false
+  const [materialConfig] = useState(checkTransparent ?{
     ior: 1.2,
     clearcoat: 0.2,
     transmission: 1,
     opacity: 0.7,
     transparent: true,
+  } : { 
+    ior: 1.2,
+    clearcoat: 0.2
   })
-  const [materials] = useState(colors.map(color => <meshPhysicalMaterial color={color} {...materialConfig} />))
-  const { playerNumber, position } = props
+  const [materials] = useState(colors.map(color => <meshPhysicalMaterial color={color} transparent={checkTransparent} {...materialConfig} />))
   return (
     <group position={position}>
       <RoundedBox args={[1,1,1]}>
