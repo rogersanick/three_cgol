@@ -1,7 +1,9 @@
 import { Grid, Plane, RoundedBox } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
 import { Suspense, useContext, useEffect, useState } from "react";
-import { Intersection } from "three";
+import { Color, Intersection } from "three";
+import { colors } from "./color";
+import { DemoGameEngineContext } from "./DemoGameEngineContext";
 import { GameEngineContext } from "./GameEngineContext";
 import GelatinousCube from "./GelatinousCube";
 import Slime from "./Slime";
@@ -17,10 +19,12 @@ const color = [
   "#F49AC2"
 ]
 
-const GameBoard = () => {
+const GameBoard = (props: { isDemo: boolean }) => {
+  const { isDemo} = props;
 
   // State of the board game from context
-  const { gelatinousCubes, slimePaths, applyCgol, addGelatinousCube } = useContext(GameEngineContext);
+  const { gamePieces, applyCgol, addGelatinousCube } = useContext(isDemo ? DemoGameEngineContext : GameEngineContext);
+  const { gelatinousCubes, slimePaths } = gamePieces;
   const [ currentPlayerNumber, setCurrentPlayerNumber ] = useState(0);
   const boardSize = gelatinousCubes.length;
 
@@ -49,33 +53,46 @@ const GameBoard = () => {
 
     // Get the cubes position from the click event
     const { x, z } = clickEvent.intersections[0].point;
-    addGelatinousCube(x, z, currentPlayerNumber);
+    const adjustedX = Math.round(x);
+    const adjustedZ = Math.round(z);
+    const cubeXIndex = adjustedX + boardSize / 2;
+    const cubeZIndex = adjustedZ + boardSize / 2;
+    addGelatinousCube(cubeXIndex, cubeZIndex, currentPlayerNumber);
   }
+
+  // Reusable three materials
+  const [ cubeMaterials ] = useState(colors.map(color => <meshStandardMaterial color={color} />))
+  const [ slimeMaterials ] = useState(colors.map(color => {
+    const lightenedColor = new Color(color).lerp(new Color("white"), 0.2)
+    return <meshStandardMaterial color={lightenedColor} />
+  }));
+  
 
   return (
     <>
       <Suspense>
-        <RoundedBox name={"StepCube"} onClick={applyCgol} args={[1, 1, 1]} position={[0,5,0]}>
+        {isDemo ? null : <RoundedBox name={"StepCube"} onClick={applyCgol} args={[1, 1, 1]} position={[0,5,0]}>
           <meshStandardMaterial color={"red"} />
-        </RoundedBox>
-        <RoundedBox name={"StepCube"} onClick={handleChangePlayer} args={[1, 1, 1]} position={[3,5,0]}>
+        </RoundedBox> }
+        { isDemo ? null : <RoundedBox name={"StepCube"} onClick={handleChangePlayer} args={[1, 1, 1]} position={[3,5,0]}>
           <meshStandardMaterial color={color[currentPlayerNumber]} />
-        </RoundedBox>
-        <Grid args={[boardSize, boardSize]} position={[-0.5, -0.45, -0.5]} cellSize={1} cellColor="white" />
+        </RoundedBox> }
+        <Grid args={[boardSize, boardSize]} position={[-0.5, -0.45, -0.5]} cellSize={1} cellColor={"purple"}/>
         {
-          gelatinousCubes.map((row, rowIndex) => {
-            return row.map((cubePlayerNumber, columnIndex) => {
-              const slimePlayerNumber = slimePaths[rowIndex][columnIndex];
+          slimePaths.map((row, rowIndex) => {
+            return row.map((slimePlayerNumber, columnIndex) => {
+              const cubePlayerNumber = gelatinousCubes[rowIndex][columnIndex];
               const cubeXIndex = rowIndex - boardSize / 2;
               const cubeZIndex = columnIndex - boardSize / 2;
-              return <group key={`Cube Slime:${cubeXIndex}Z:${cubeZIndex}`}>
-                {cubePlayerNumber !== null ? <GelatinousCube playerNumber={cubePlayerNumber} key={`Cube X:${cubeXIndex}Z:${cubeZIndex}`} position={[cubeXIndex, 0.3, cubeZIndex]}/> : null }
-                {slimePlayerNumber !== null ? <Slime playerNumber={slimePlayerNumber} key={`Slime X:${cubeXIndex}Z:${cubeZIndex}`} position={[cubeXIndex, -0.35, cubeZIndex]}/> : null }
+              
+              return <group key={`${cubeXIndex}${cubeZIndex}${slimePlayerNumber}`}>
+                {cubePlayerNumber !== null ? <GelatinousCube material={cubeMaterials[cubePlayerNumber]} position={[cubeXIndex, 0.3, cubeZIndex]}/> : null }
+                {slimePlayerNumber !== null ? <Slime material={slimeMaterials[slimePlayerNumber]} position={[cubeXIndex, -0.35, cubeZIndex]}/> : null }
               </group>
             })
           })
         }
-        <Plane name={"GameBoard"} args={[boardSize, boardSize]} onClick={(e) => handleAddGelatinousCube(e)} rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, -0.5, -0.5]} receiveShadow/>
+        <Plane name={"GameBoard"} args={[boardSize, boardSize]} onClick={(e) => handleAddGelatinousCube(e)} rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, -0.5, -0.5]} receiveShadow />
       </Suspense>
     </>
   );

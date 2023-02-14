@@ -126,7 +126,6 @@ const findClosestToZeroZero = (coordinates: [number, number, number][]) => {
   
     for (const coordinate of coordinates) {
       const distance = Math.sqrt(Math.pow(coordinate[1], 2) + Math.pow(coordinate[2], 2));
-      console.log(`distance: ${distance}, cubeType: ${coordinate[0]}`)
       if (distance < closestDistance) {
         closestCoordinate = coordinate;
         closestDistance = distance;
@@ -135,11 +134,6 @@ const findClosestToZeroZero = (coordinates: [number, number, number][]) => {
   
     return closestCoordinate;
   };
-
-
-
-
-
 
 function slimePathTransition(gelatinousCubes: (number | null)[][], slimePaths: (number | null)[][]): (number | null)[][] {
     for (let row = 0; row < slimePaths.length; row++) {

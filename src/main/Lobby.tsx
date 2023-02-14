@@ -1,9 +1,7 @@
-import { OrbitControls } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
 import { useContext, useState } from "react";
-import GelatinousCube from "./GelatinousCube";
+import { DemoGameEngine } from "./DemoGameEngineContext";
+import GameGraphics from "./GameGraphics";
 import { PeerConnectionsContext } from "./PeerContext";
-import Slime from "./Slime";
 
 // Props for the lobby componet
 interface LobbyProps {
@@ -30,21 +28,18 @@ const Lobby = (props: LobbyProps) => {
   const { id } = useContext(PeerConnectionsContext);
 
   return (
-    <div className={`transition-all duration-500 ease-in ${transitioning ? "translate-y-full" : ""} flex flex-col justify-between items-center h-screen`}>
-      <div className="container flex flex-col h-1/2 mx-6">
+    <div className={`transition-all duration-500 ease-in ${transitioning ? "translate-y-full" : ""} flex flex-col items-center h-screen`}>
+      <div className="container flex flex-col justify-center align-center h-1/2 mx-6 p-6 w-screen">
         <h1 className="mt-6 text-4xl font-bold text-white">Lobby</h1>
-        <div className="mt-2 font-bold text-white py-4">{`Your name is: ${id}, you Slimey Slime.`}</div>
-        <div className="h-3/5 w-full fixed">
-          <Canvas camera={{ fov: 70, position: [3, 1, 3] }}>
-            <GelatinousCube playerNumber={1} position = {[0,0,0]} transparent={false}/>
-            <Slime playerNumber={1} position = {[0,-0.7,0]}/>
-            <OrbitControls />
-            <ambientLight />
-          </Canvas>
+        <div className="container border mt-4 h-3/4">
+          <DemoGameEngine boardSize={50}>
+            <GameGraphics monitorPerf={false} isDemo={true} />
+          </DemoGameEngine>
         </div>
+        <div className="mt-2 font-bold text-white py-4">{`Your name is: ${id}, you Slimey Slime.`}</div>
       </div>
-      <div className="h-2/6 w-10/12 container rounded bg-gray-100 bg-opacity-75 mx-2 my-2 px-2 py-2 flex flex-col justify-around">
-          <div className="max-h-32 h-2/3 overflow-y-auto">
+      <div className="h-1/4 container rounded bg-gray-100 bg-opacity-75 mx-6 px-12 py-12 w-fit">
+          <div className="max-h-32 overflow-y-auto">
             {Object.keys(peerConnections).map((peerId) => (
               <>
                 <div key={peerId}>{peerId}</div>

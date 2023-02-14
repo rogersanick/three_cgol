@@ -3,5 +3,5 @@
 @import 'tailwindcss/utilities';
 
 #three-canvas {
-  position: absolute !important;
+  /* position: absolute !important; */
 }

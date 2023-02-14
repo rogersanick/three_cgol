@@ -36,12 +36,21 @@ const PeerConnections: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   // Add a peer
   const addPeer = (peerId: string) => {
+
+    // If the client is already a peer, log an error 
+    if (peerConnections[peerId]) {
+      console.log("That peer has already been added.")
+    }
+
+    // Connect to the client using the provided ID
     const connection = peerClient.connect(peerId);
     setPeerConnections({ ...peerConnections, [peerId]: connection });
-    setPeerConnectionStatus({ ...peerConnectionStatus, [peerId]: 'CLOSED' })
+    setPeerConnectionStatus({ ...peerConnectionStatus, [peerId]: 'PENDING' })
+
     connection.on('open', () => {
       setPeerConnectionStatus({ ...peerConnectionStatus, [peerId]: 'OPEN' });
     })
+    
     connection.on('data', (data) => {
       console.log('Received', data);
     })

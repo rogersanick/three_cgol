@@ -8,18 +8,13 @@ const App = () => {
   const [gameStarted, setGameStarted] = useState(false);
 
   const Lobby = React.lazy(() => import('./Lobby'));
-  const GameGui = React.lazy(() => import('./GameGui'));
-  const GameGraphics = React.lazy(() => import('./GameGraphics'));
-
+  const Game = React.lazy(() => import('./Game'));
   return (
-    <div className="h-screen w-screen bg-slate-800 z-0">
+    <div className="h-screen w-screen bg-slate-800">
       <Suspense fallback={<LoadingIndicator/>}>
         <PeerConnections>
-          { gameStarted ?         
-          <GameEngine boardSize={50}>
-            <GameGui />
-            <GameGraphics />
-          </GameEngine> : 
+          { !gameStarted ?         
+          <Game /> :
           <Lobby startGame={() => setGameStarted(true)} /> }
         </PeerConnections>
       </Suspense>

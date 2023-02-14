@@ -1,44 +1,47 @@
 import React, { ReactNode, useState } from 'react';
-import { cgolGelatinousCubeTransition, slimePathTransition } from './GamePhases';
+
+export interface GamePieces {
+  gelatinousCubes: (number | null)[][];
+  slimePaths: (number | null)[][];
+}
 
 // This is the interface for the context
-interface GameEngineContextType {
-  gelatinousCubes: (number | null)[][];
+export interface GameEngineContextType {
+  gamePieces: GamePieces;
   addGelatinousCube: (x: number, y: number, playerNumber: number) => void;
-  slimePaths: (number | null)[][];
   applyCgol: () => void;
 }
 
 // Instantiate the board game context
 const GameEngineContext = React.createContext<GameEngineContextType>({
-  gelatinousCubes: [],
+  gamePieces: {
+    gelatinousCubes: [] as (number | null)[][],
+    slimePaths: [] as (number | null)[][],
+  },
   applyCgol: () => {},
   addGelatinousCube: (_: number, __: number, ___: number) => {},
-  slimePaths: [],
 });
 
 const GameEngine: React.FC<{ children: ReactNode, boardSize: number }> = ({ children, boardSize }) => {
 
-  // Build the representation of gelatinousCubes
-  const [gelatinousCubes, setGelatinousCubes] = useState<(number | null)[][]>(
-    Array.from({ length: boardSize }, () => Array.from({ length: boardSize }, () => null))
-  );
-
-  // Build the representation of slimePaths
-  const [slimePaths, setSlimePaths] = useState<(number | null)[][]>(
-    Array.from({ length: boardSize }, () => Array.from({ length: boardSize }, () => null))
-  );
-
+  // Build the representation of game pieces
+  const [gamePieces, setGamePieces] = useState<GamePieces>({
+    gelatinousCubes: Array.from({ length: boardSize }, () => Array.from({ length: boardSize }, () => null)) as (number | null)[][],
+    slimePaths: Array.from({ length: boardSize }, () => Array.from({ length: boardSize }, () => null)) as (number | null)[][]
+  });
+  
   // Handle the progression of CGOl for Gelatinous Cubes
   const applyCgol = () => { 
-    const newGelatinousCubes = cgolGelatinousCubeTransition(gelatinousCubes)
-    setGelatinousCubes(newGelatinousCubes) 
-    const newSlimePaths = slimePathTransition(newGelatinousCubes, slimePaths)
-    setSlimePaths(newSlimePaths)
+    // const { gelatinousCubes, slimePaths } = gamePieces;
+    // const newGelatinousCubes = cgolGelatinousCubeTransition(gelatinousCubes)
+    // setGelatinousCubes(newGelatinousCubes) 
+    // const newSlimePaths = slimePathTransition(newGelatinousCubes, slimePaths)
+    // setSlimePaths(newSlimePaths)
   }
   
   // Create a function which updates the board
   function addGelatinousCube(x: number, z: number, playerNumber: number) {
+    const { gelatinousCubes, slimePaths } = gamePieces;
     const adjustedX = Math.round(x);
     const adjustedZ = Math.round(z);
     const cubeXIndex = adjustedX + boardSize / 2;
@@ -47,18 +50,15 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number }> = ({ chil
     if (gelatinousCubes[cubeXIndex][cubeZIndex] === null) {
       // Update gelatinous cubes
       const newBoard = duplicateArrayOfArrays(gelatinousCubes);
-      newBoard[cubeXIndex][cubeZIndex] = playerNumber;
-      setGelatinousCubes(newBoard);
-      
-      // Update slime paths
       const newSlimePaths = duplicateArrayOfArrays(slimePaths);
+      newBoard[cubeXIndex][cubeZIndex] = playerNumber;
       newSlimePaths[cubeXIndex][cubeZIndex] = playerNumber;
-      setSlimePaths(newSlimePaths);
+      setGamePieces({ gelatinousCubes: newBoard, slimePaths: newSlimePaths });
     }
   }
 
   return (
-    <GameEngineContext.Provider value={{ gelatinousCubes, applyCgol, addGelatinousCube, slimePaths }}>
+    <GameEngineContext.Provider value={{ gamePieces, applyCgol, addGelatinousCube }}>
       {children}
     </GameEngineContext.Provider>
   );

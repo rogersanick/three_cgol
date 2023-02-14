@@ -1,4 +1,4 @@
-import { cgolGelatinousCubeTransition, findOrganismSize } from '../main/GamePhases';
+import { cgolGelatinousCubeTransition, findOrganismSize } from '../main/gameLogic/gamePhases';
 import { expect, it, describe } from 'vitest';
 
 describe('cgolGelatinousCubeTransition', () => {
