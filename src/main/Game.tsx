@@ -1,11 +1,11 @@
-import { GameEngine } from "./GameEngineContext"
+import { GameEngine } from "./gameEngine/GameEngineContext"
 import GameGraphics from "./GameGraphics"
 import GameGui from "./GameGui"
 
 const Game = () => {
-  return <GameEngine boardSize={50}>
+  return <GameEngine boardSize={100} isDemo={false}>
     <GameGui />
-    <GameGraphics monitorPerf={false} isDemo={true} />
+    <GameGraphics monitorPerf={false} />
   </GameEngine>
 }
 

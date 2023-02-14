@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useState } from "react";
 import { PeerConnections } from "./PeerContext";
 
 import LoadingIndicator from "./LoadingIndicator";

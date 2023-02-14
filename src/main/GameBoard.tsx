@@ -3,8 +3,7 @@ import { ThreeEvent } from "@react-three/fiber";
 import { Suspense, useContext, useEffect, useState } from "react";
 import { Color, Intersection } from "three";
 import { colors } from "./color";
-import { DemoGameEngineContext } from "./DemoGameEngineContext";
-import { GameEngineContext } from "./GameEngineContext";
+import { GameEngineContext } from "./gameEngine/GameEngineContext";
 import GelatinousCube from "./GelatinousCube";
 import Slime from "./Slime";
 
@@ -19,11 +18,10 @@ const color = [
   "#F49AC2"
 ]
 
-const GameBoard = (props: { isDemo: boolean }) => {
-  const { isDemo} = props;
+const GameBoard = () => {
 
   // State of the board game from context
-  const { gamePieces, applyCgol, addGelatinousCube } = useContext(isDemo ? DemoGameEngineContext : GameEngineContext);
+  const { isDemo, gamePieces, applyCgol, addGelatinousCube } = useContext(GameEngineContext);
   const { gelatinousCubes, slimePaths } = gamePieces;
   const [ currentPlayerNumber, setCurrentPlayerNumber ] = useState(0);
   const boardSize = gelatinousCubes.length;
