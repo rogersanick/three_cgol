@@ -2,10 +2,10 @@ import { GameEngine } from "./GameEngineContext"
 import GameGraphics from "./GameGraphics"
 import GameGui from "./GameGui"
 
-const Game = (props: any) => {
-  return <GameEngine boardSize={100}>
+const Game = () => {
+  return <GameEngine boardSize={50}>
     <GameGui />
-    <GameGraphics monitorPerf={true} isDemo={false}/>
+    <GameGraphics monitorPerf={false} isDemo={true} />
   </GameEngine>
 }
 
