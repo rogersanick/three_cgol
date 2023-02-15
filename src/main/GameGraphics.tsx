@@ -15,22 +15,9 @@ const GameGraphics = (props: { monitorPerf: boolean }) => {
     <Canvas id="three-canvas" className="top-0" camera={{ fov:50, position: camPosition }}>
       <PerformanceMonitor>
         <AdaptivePixelRatio />
-        {isDemo ? <PresentationControls
-          global
-          config={{ mass: 2, tension: 500 }}
-          snap={{ mass: 4, tension: 100 }}
-          rotation={[0, 0.3, 0]}
-          polar={[-Math.PI / 3, Math.PI / 6]}
-          azimuth={[-Math.PI / 1.4, Math.PI / 2]}>
-            {/* <Environment preset="city" /> */}
-            { monitorPerf ? <Perf position="top-left"/> : null }
-            <GameBoard />
-          </PresentationControls> : 
-          <>
-            <OrbitControls autoRotateSpeed={1.5}/>
-            <GameBoard />
-          </>}
-          <Lights />
+        <OrbitControls autoRotate={isDemo} autoRotateSpeed={1.5}/>
+        <GameBoard />
+        <Lights />
       </PerformanceMonitor>
     </Canvas>
   );
