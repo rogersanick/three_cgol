@@ -1,7 +1,7 @@
 import { Grid, Plane, RoundedBox } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
 import { Suspense, useContext, useEffect, useState } from "react";
-import { Color, Intersection } from "three";
+import { Color, Intersection, MeshToonMaterial } from "three";
 import { colors } from "./color";
 import { GameEngineContext } from "./gameEngine/GameEngineContext";
 import GelatinousCube from "./GelatinousCube";
@@ -75,7 +75,7 @@ const GameBoard = () => {
         { isDemo ? null : <RoundedBox name={"StepCube"} onClick={handleChangePlayer} args={[1, 1, 1]} position={[3,5,0]}>
           <meshStandardMaterial color={color[currentPlayerNumber]} />
         </RoundedBox> }
-        <Grid args={[boardSize, boardSize]} position={[-0.5, -0.45, -0.5]} cellSize={1} cellColor={"purple"}/>
+        <Grid args={[boardSize, boardSize]} position={[-0.5, -0.45, -0.5]} cellSize={1} cellColor={"purple"} cellThickness={0.1} sectionColor={[0.5, 0.5, 10] as any}/>
         {
           slimePaths.map((row, rowIndex) => {
             return row.map((slimePlayerNumber, columnIndex) => {
@@ -90,7 +90,9 @@ const GameBoard = () => {
             })
           })
         }
-        <Plane name={"GameBoard"} args={[boardSize, boardSize]} onClick={(e) => handleAddGelatinousCube(e)} rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, -0.5, -0.5]} receiveShadow />
+        <Plane name={"GameBoard"} args={[boardSize, boardSize]} onClick={(e) => handleAddGelatinousCube(e)} rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, -0.5, -0.5]} receiveShadow>
+          <meshToonMaterial color={"grey"} />
+        </Plane>
       </Suspense>
     </>
   );
