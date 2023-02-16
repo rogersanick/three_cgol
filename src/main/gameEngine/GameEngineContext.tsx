@@ -35,9 +35,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
     gelatinousCubes: Array.from({ length: boardSize }, () => Array.from({ length: boardSize }, () => null)) as (number | null)[][],
     slimePaths: Array.from({ length: boardSize }, () => Array.from({ length: boardSize }, () => null)) as (number | null)[][]
   });
-
-  // Game state queue
-  const [gameStateQueue, setGameStateQueue] = useState<GamePieces[]>([]);
+  const [nextGamePieces, setNextGamePieces] = useState<GamePieces | null>()
 
   // Create a flag to indiciate the gameState is transitioning
   const [transitioning, setTransitioning] = useState(false);
@@ -61,8 +59,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
         const { gelatinousCubes, slimePaths } = gamePieces;
       
         // Ask for a new game state if we're not already updating
-        if (gameStateQueue.length < 3) {
-          console.log(gameStateQueue.length)
+        if (!nextGamePieces) {
           gameEngineWorkerRef.current.postMessage({
             gelatinousCubes,
             slimePaths
@@ -76,29 +73,23 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
             ({ gelatinousCubes, slimePaths } = addNewOrganism({ gelatinousCubes, slimePaths }, boardSize))
           }
 
-          const nextGameStateQueue = [...gameStateQueue]
-          nextGameStateQueue.push({ gelatinousCubes, slimePaths })
-          setGameStateQueue(nextGameStateQueue)
+          setNextGamePieces({ gelatinousCubes, slimePaths })
         }
       }
       fillGameStateQueueInterval = setInterval(fillGameStateQueue, 200)
 
       // Continue the demo
       const continueDemo = () => {
-        if (gameStateQueue.length === 0) {
-          console.log("No game states in queue!")
+        if (!nextGamePieces) {
+          console.log("No next game state available")
         } else {
 
           // Set the transitioning flag
           setTransitioning(true)
 
-          // Get the next game state from the queue
-          const nextGameStateQueue = [...gameStateQueue]
-          const nextGameState = nextGameStateQueue.shift()
-          setGameStateQueue(nextGameStateQueue)
-
-          // Update the game state
-          setGamePieces(nextGameState!)
+          // Apply the next game pieces
+          setGamePieces(nextGamePieces)
+          setNextGamePieces(null)
 
           setTimeout(() => {
             setTransitioning(false)
