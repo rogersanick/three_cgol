@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { addNewOrganism } from '../gameLogic/addNewOrganism';
+import { duplicateArrayOfArrays } from '../utils';
 
 export interface GamePieces {
   gelatinousCubes: (number | null)[][];
@@ -96,16 +97,12 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
 
   return (
     <GameEngineContext.Provider value={{ 
-      isDemo, gamePieces, 
+      isDemo, gamePieces,
       applyCgol: isDemo ? () => {} : applyCgol , 
       addGelatinousCube: isDemo ? () => {} : addGelatinousCube  }}>
       {children}
     </GameEngineContext.Provider>
   );
 };
-
-function duplicateArrayOfArrays<T>(originalArray: T[][]): T[][] {
-  return originalArray.map(arr => arr.map(elem => elem));
-}
 
 export { GameEngine, GameEngineContext };
