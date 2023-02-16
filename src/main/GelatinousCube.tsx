@@ -5,25 +5,20 @@ import { RoundedBoxGeometry } from "./RoundedBoxGeometry"
 const GelatinousCube = (props: { 
   position: [number, number, number]
   material: JSX.Element
+  aboveBoard: boolean
 }) => {
   
-  const { position, material } = props
+  const { position, material, aboveBoard } = props
   const adjPosition = [...position]
   adjPosition[1] -= 1.5
 
-  const [active, setActive] = React.useState(false)
   const { animatedPosition } = useSpring({
-    animatedPosition: active ? adjPosition : position,
-    config: config.gentle
+    animatedPosition: aboveBoard ? adjPosition : position,
+    config: {
+      ...config.wobbly,
+      duration: 200
+    }
   });
-
-  // TODO: Remove this logic and link animation into game transitions
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActive(!active)
-    }, 1000)
-    return () => clearInterval(interval)
-  }, [active])
 
   return (
     // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)

@@ -21,7 +21,7 @@ const color = [
 const GameBoard = () => {
 
   // State of the board game from context
-  const { isDemo, gamePieces, applyCgol, addGelatinousCube } = useContext(GameEngineContext);
+  const { isDemo, gamePieces, applyCgol, addGelatinousCube, transitioning } = useContext(GameEngineContext);
   const { gelatinousCubes, slimePaths } = gamePieces;
   const [ currentPlayerNumber, setCurrentPlayerNumber ] = useState(0);
   const boardSize = gelatinousCubes.length;
@@ -84,7 +84,7 @@ const GameBoard = () => {
               const cubeZIndex = columnIndex - boardSize / 2;
               
               return <group key={`${cubeXIndex}${cubeZIndex}${slimePlayerNumber}`}>
-                {cubePlayerNumber !== null ? <GelatinousCube material={cubeMaterials[cubePlayerNumber]} position={[cubeXIndex, 0.3, cubeZIndex]}/> : null }
+                {cubePlayerNumber !== null ? <GelatinousCube material={cubeMaterials[cubePlayerNumber]} position={[cubeXIndex, 0.3, cubeZIndex]} aboveBoard={!transitioning}/> : null }
                 {slimePlayerNumber !== null ? <Slime material={slimeMaterials[slimePlayerNumber]} position={[cubeXIndex, -0.35, cubeZIndex]}/> : null }
               </group>
             })

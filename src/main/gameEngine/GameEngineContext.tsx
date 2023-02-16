@@ -13,6 +13,7 @@ export interface GameEngineContextType {
   isDemo: boolean;
   addGelatinousCube: (x: number, y: number, playerNumber: number) => void;
   applyCgol: () => void;
+  transitioning: boolean;
 }
 
 // Instantiate the board game context
@@ -24,6 +25,7 @@ const GameEngineContext = React.createContext<GameEngineContextType>({
   isDemo: false,
   applyCgol: () => {},
   addGelatinousCube: (_: number, __: number, ___: number) => {},
+  transitioning: false,
 });
 
 const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boolean }> = ({ children, boardSize, isDemo }) => {
@@ -34,40 +36,85 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
     slimePaths: Array.from({ length: boardSize }, () => Array.from({ length: boardSize }, () => null)) as (number | null)[][]
   });
 
+  // Game state queue
+  const [gameStateQueue, setGameStateQueue] = useState<GamePieces[]>([]);
+
+  // Create a flag to indiciate the gameState is transitioning
+  const [transitioning, setTransitioning] = useState(false);
+
   // Create a worker to handle the game logic
   const gameEngineWorkerRef = useRef(
     new Worker(new URL('../gameLogic/workers/gamePhaseWorker.ts', import.meta.url), { type: 'module' }));
   
   // Add random cubes
   useEffect(() => {
+
+    let continueDemoInterval: NodeJS.Timer;
+    let fillGameStateQueueInterval: NodeJS.Timer;
+
     // Demo logic
     if (isDemo) {
-      const continueDemo = async () => {
+
+      // Filling the game state queue
+      const fillGameStateQueue = async () => {
         // Get the game pieces from state
         const { gelatinousCubes, slimePaths } = gamePieces;
       
-        // Send game state to be processed by the game engine
-        gameEngineWorkerRef.current.postMessage({
-          gelatinousCubes,
-          slimePaths
-        });
+        // Ask for a new game state if we're not already updating
+        if (gameStateQueue.length < 3) {
+          console.log(gameStateQueue.length)
+          gameEngineWorkerRef.current.postMessage({
+            gelatinousCubes,
+            slimePaths
+          });
+        }
   
         gameEngineWorkerRef.current.onmessage = (event) => {
+          // Maybe add an organism
           let { gelatinousCubes, slimePaths } = event.data
           if (Math.random() > 0.6) {
             ({ gelatinousCubes, slimePaths } = addNewOrganism({ gelatinousCubes, slimePaths }, boardSize))
           }
-          setGamePieces({ gelatinousCubes, slimePaths })
+
+          const nextGameStateQueue = [...gameStateQueue]
+          nextGameStateQueue.push({ gelatinousCubes, slimePaths })
+          setGameStateQueue(nextGameStateQueue)
         }
       }
-  
-      const interval = setInterval(continueDemo, 800)
-      return () => { clearInterval(interval) }
+      fillGameStateQueueInterval = setInterval(fillGameStateQueue, 200)
+
+      // Continue the demo
+      const continueDemo = () => {
+        if (gameStateQueue.length === 0) {
+          console.log("No game states in queue!")
+        } else {
+
+          // Set the transitioning flag
+          setTransitioning(true)
+
+          // Get the next game state from the queue
+          const nextGameStateQueue = [...gameStateQueue]
+          const nextGameState = nextGameStateQueue.shift()
+          setGameStateQueue(nextGameStateQueue)
+
+          // Update the game state
+          setGamePieces(nextGameState!)
+
+          setTimeout(() => {
+            setTransitioning(false)
+          }, 200)
+        }
+      }
+      continueDemoInterval = setInterval(continueDemo, 2000)
     } else {
       gameEngineWorkerRef.current.onmessage = (event) => {
         let { gelatinousCubes, slimePaths } = event.data
         setGamePieces({ gelatinousCubes, slimePaths })
       }
+    }
+    return () => { 
+      fillGameStateQueueInterval && clearInterval(fillGameStateQueueInterval)
+      continueDemoInterval && clearInterval(continueDemoInterval) 
     }
   })
 
@@ -97,7 +144,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
 
   return (
     <GameEngineContext.Provider value={{ 
-      isDemo, gamePieces,
+      isDemo, gamePieces, transitioning,
       applyCgol: isDemo ? () => {} : applyCgol , 
       addGelatinousCube: isDemo ? () => {} : addGelatinousCube  }}>
       {children}
