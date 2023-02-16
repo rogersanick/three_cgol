@@ -93,10 +93,10 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
 
           setTimeout(() => {
             setTransitioning(false)
-          }, 200)
+          }, 900)
         }
       }
-      continueDemoInterval = setInterval(continueDemo, 2000)
+      continueDemoInterval = setInterval(continueDemo, 1000)
     } else {
       gameEngineWorkerRef.current.onmessage = (event) => {
         let { gelatinousCubes, slimePaths } = event.data
