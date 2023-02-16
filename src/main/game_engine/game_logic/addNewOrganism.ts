@@ -1,5 +1,5 @@
-import { GamePieces } from "../gameEngine/GameEngineContext";
-import { duplicateArrayOfArrays } from "../utils";
+import { GamePieces } from "../GameEngineContext";
+import { duplicateArrayOfArrays } from "../../utils";
 
 // Utility function to add organisms
 const addNewOrganism = (gamePieces: GamePieces, boardSize: number) => {

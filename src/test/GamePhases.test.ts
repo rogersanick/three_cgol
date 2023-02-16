@@ -1,5 +1,5 @@
-import { cgolGelatinousCubeTransition, findOrganismSize } from '../main/gameLogic/gamePhases';
 import { expect, it, describe } from 'vitest';
+import { cgolGelatinousCubeTransition, findOrganismSize } from '../main/game_engine/game_logic/gamePhases';
 
 describe('cgolGelatinousCubeTransition', () => {
   it ('applies the appropriate transformation for a single cell that should die', () => {

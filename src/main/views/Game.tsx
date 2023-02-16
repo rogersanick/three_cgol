@@ -1,6 +1,6 @@
-import { GameEngine } from "./gameEngine/GameEngineContext"
-import GameGraphics from "./GameGraphics"
-import GameGui from "./GameGui"
+import { GameEngine } from "../game_engine/GameEngineContext"
+import GameGraphics from "../three_components/GameGraphics"
+import GameGui from "../ui_components/GameGui"
 
 const Game = () => {
   return <GameEngine boardSize={100} isDemo={false}>

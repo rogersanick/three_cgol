@@ -1,9 +1,9 @@
 import { Grid, Plane, RoundedBox } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
 import { Suspense, useContext, useEffect, useState } from "react";
-import { Color, Intersection, MeshToonMaterial } from "three";
-import { colors } from "./color";
-import { GameEngineContext } from "./gameEngine/GameEngineContext";
+import { Color, Intersection } from "three";
+import { colors } from "../constants/color";
+import { GameEngineContext } from "../game_engine/GameEngineContext";
 import GelatinousCube from "./GelatinousCube";
 import Slime from "./Slime";
 
@@ -21,7 +21,7 @@ const color = [
 const GameBoard = () => {
 
   // State of the board game from context
-  const { isDemo, gamePieces, applyCgol, addGelatinousCube, transitioning } = useContext(GameEngineContext);
+  const { isDemo, gamePieces, applyCgol, addGelatinousCube } = useContext(GameEngineContext);
   const { gelatinousCubes, slimePaths } = gamePieces;
   const [ currentPlayerNumber, setCurrentPlayerNumber ] = useState(0);
   const boardSize = gelatinousCubes.length;
@@ -65,7 +65,6 @@ const GameBoard = () => {
     return <meshStandardMaterial color={lightenedColor} />
   }));
   
-
   return (
     <>
       <Suspense>
@@ -84,7 +83,7 @@ const GameBoard = () => {
               const cubeZIndex = columnIndex - boardSize / 2;
               
               return <group key={`${cubeXIndex}${cubeZIndex}${slimePlayerNumber}`}>
-                {cubePlayerNumber !== null ? <GelatinousCube material={cubeMaterials[cubePlayerNumber]} position={[cubeXIndex, 0.3, cubeZIndex]} aboveBoard={!transitioning}/> : null }
+                {cubePlayerNumber !== null ? <GelatinousCube material={cubeMaterials[cubePlayerNumber]} position={[cubeXIndex, 0.3, cubeZIndex]} aboveBoard={true}/> : null }
                 {slimePlayerNumber !== null ? <Slime material={slimeMaterials[slimePlayerNumber]} position={[cubeXIndex, -0.35, cubeZIndex]}/> : null }
               </group>
             })

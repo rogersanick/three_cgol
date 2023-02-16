@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
-import { addNewOrganism } from '../gameLogic/addNewOrganism';
+import { addNewOrganism } from './game_logic/addNewOrganism';
 import { duplicateArrayOfArrays } from '../utils';
 
 export interface GamePieces {
@@ -13,7 +13,6 @@ export interface GameEngineContextType {
   isDemo: boolean;
   addGelatinousCube: (x: number, y: number, playerNumber: number) => void;
   applyCgol: () => void;
-  transitioning: boolean;
 }
 
 // Instantiate the board game context
@@ -25,7 +24,6 @@ const GameEngineContext = React.createContext<GameEngineContextType>({
   isDemo: false,
   applyCgol: () => {},
   addGelatinousCube: (_: number, __: number, ___: number) => {},
-  transitioning: false,
 });
 
 const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boolean }> = ({ children, boardSize, isDemo }) => {
@@ -47,14 +45,14 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
   // Add random cubes
   useEffect(() => {
 
+    let getNextGamePiecesInterval: NodeJS.Timer;
     let continueDemoInterval: NodeJS.Timer;
-    let fillGameStateQueueInterval: NodeJS.Timer;
-
+    
     // Demo logic
     if (isDemo) {
 
       // Filling the game state queue
-      const fillGameStateQueue = async () => {
+      const getNextGamePieces = async () => {
         // Get the game pieces from state
         const { gelatinousCubes, slimePaths } = gamePieces;
       
@@ -76,24 +74,16 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
           setNextGamePieces({ gelatinousCubes, slimePaths })
         }
       }
-      fillGameStateQueueInterval = setInterval(fillGameStateQueue, 200)
+      getNextGamePiecesInterval = setInterval(getNextGamePieces, 200)
 
       // Continue the demo
       const continueDemo = () => {
         if (!nextGamePieces) {
           console.log("No next game state available")
         } else {
-
-          // Set the transitioning flag
-          setTransitioning(true)
-
           // Apply the next game pieces
           setGamePieces(nextGamePieces)
           setNextGamePieces(null)
-
-          setTimeout(() => {
-            setTransitioning(false)
-          }, 900)
         }
       }
       continueDemoInterval = setInterval(continueDemo, 1000)
@@ -104,7 +94,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
       }
     }
     return () => { 
-      fillGameStateQueueInterval && clearInterval(fillGameStateQueueInterval)
+      getNextGamePiecesInterval && clearInterval(getNextGamePiecesInterval)
       continueDemoInterval && clearInterval(continueDemoInterval) 
     }
   })
@@ -135,7 +125,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
 
   return (
     <GameEngineContext.Provider value={{ 
-      isDemo, gamePieces, transitioning,
+      isDemo, gamePieces,
       applyCgol: isDemo ? () => {} : applyCgol , 
       addGelatinousCube: isDemo ? () => {} : addGelatinousCube  }}>
       {children}

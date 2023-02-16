@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { animated, config, useSpring } from "@react-spring/three"
 import { RoundedBoxGeometry } from "./RoundedBoxGeometry"
 
@@ -13,7 +13,7 @@ const GelatinousCube = (props: {
   adjPosition[1] -= 1.5
 
   const { animatedPosition } = useSpring({
-    animatedPosition: aboveBoard ? adjPosition : position,
+    animatedPosition: position,
     config: {
       ...config.wobbly,
       duration: 200

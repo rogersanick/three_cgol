@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
-import { GameEngine } from "./gameEngine/GameEngineContext";
-import GameGraphics from "./GameGraphics";
-import { PeerConnectionsContext } from "./PeerContext";
+import { GameEngine } from "../game_engine/GameEngineContext";
+import { PeerConnectionsContext } from "../peer_communication/PeerContext";
+import GameGraphics from "../three_components/GameGraphics";
 
 // Props for the lobby componet
 interface LobbyProps {
