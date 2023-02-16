@@ -40,7 +40,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
 
   // Create a worker to handle the game logic
   const gameEngineWorkerRef = useRef(
-    new Worker(new URL('../gameLogic/workers/gamePhaseWorker.ts', import.meta.url), { type: 'module' }));
+    new Worker(new URL('./game_logic/workers/gamePhaseWorker.ts', import.meta.url), { type: 'module' }));
   
   // Add random cubes
   useEffect(() => {
@@ -74,7 +74,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
           setNextGamePieces({ gelatinousCubes, slimePaths })
         }
       }
-      getNextGamePiecesInterval = setInterval(getNextGamePieces, 200)
+      getNextGamePiecesInterval = setInterval(getNextGamePieces, 100)
 
       // Continue the demo
       const continueDemo = () => {
