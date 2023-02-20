@@ -1,7 +1,6 @@
 import { OrbitControls, PerformanceMonitor, PresentationControls } from "@react-three/drei";
-import { Suspense, useContext } from "react";
+import { useContext } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Perf } from 'r3f-perf';
 import GameBoard from "./GameBoard";
 import Lights from "./Lights";
 import { GameEngineContext } from "../game_engine/GameEngineContext";

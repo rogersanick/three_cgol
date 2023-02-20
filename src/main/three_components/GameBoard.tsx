@@ -21,9 +21,29 @@ const color = [
 const GameBoard = () => {
 
   // State of the board game from context
-  const { isDemo, gamePieces, applyCgol, addGelatinousCube } = useContext(GameEngineContext);
-  const { gelatinousCubes, slimePaths } = gamePieces;
+  const { 
+    isDemo, 
+    gameState, 
+    gameStateIndex, 
+    advanceGameState, 
+    addGelatinousCube,
+    requestNextGameState,
+  } = useContext(GameEngineContext);
+  const { gelatinousCubes, slimePaths } = gameState[gameStateIndex];
+
+  // State of current player
+  // TODO: Life this into context
   const [ currentPlayerNumber, setCurrentPlayerNumber ] = useState(0);
+  const [animationDuration] = useState(200)
+
+  // Reusable three materials
+  const [ cubeMaterials ] = useState(colors.map(color => <meshStandardMaterial color={color} />))
+  const [ slimeMaterials ] = useState(colors.map(color => {
+    const lightenedColor = new Color(color).lerp(new Color("white"), 0.2)
+    return <meshStandardMaterial color={lightenedColor} />
+  }));
+
+  // Get the board size
   const boardSize = gelatinousCubes.length;
 
   // Handle the player input
@@ -34,6 +54,23 @@ const GameBoard = () => {
   const handleChangePlayer = () => {
     setCurrentPlayerNumber((currentPlayerNumber + 1) % 8)
   }
+
+  useEffect(() => {
+    let requestNextGameStateInterval: NodeJS.Timer;
+    
+    // Demo logic
+    if (isDemo) {
+      requestNextGameStateInterval = setInterval(requestNextGameState, 500)
+    } 
+
+    if (gameStateIndex === gameState.length - 2) {
+      setTimeout(advanceGameState, animationDuration)
+    }
+
+    return () => { 
+      requestNextGameStateInterval && clearInterval(requestNextGameStateInterval)
+    }
+  }, [gameState, gameStateIndex])
 
   useEffect(() => {
     document.addEventListener('keydown', handleChangePlayerKeyBoardInput)
@@ -57,34 +94,35 @@ const GameBoard = () => {
     const cubeZIndex = adjustedZ + boardSize / 2;
     addGelatinousCube(cubeXIndex, cubeZIndex, currentPlayerNumber);
   }
-
-  // Reusable three materials
-  const [ cubeMaterials ] = useState(colors.map(color => <meshStandardMaterial color={color} />))
-  const [ slimeMaterials ] = useState(colors.map(color => {
-    const lightenedColor = new Color(color).lerp(new Color("white"), 0.2)
-    return <meshStandardMaterial color={lightenedColor} />
-  }));
   
   return (
     <>
       <Suspense>
-        {isDemo ? null : <RoundedBox name={"StepCube"} onClick={applyCgol} args={[1, 1, 1]} position={[0,5,0]}>
+        {isDemo ? null : <RoundedBox name={"StepCube"} onClick={requestNextGameState} args={[1, 1, 1]} position={[0,5,0]}>
           <meshStandardMaterial color={"red"} />
         </RoundedBox> }
         { isDemo ? null : <RoundedBox name={"StepCube"} onClick={handleChangePlayer} args={[1, 1, 1]} position={[3,5,0]}>
           <meshStandardMaterial color={color[currentPlayerNumber]} />
         </RoundedBox> }
-        <Grid args={[boardSize, boardSize]} position={[-0.5, -0.45, -0.5]} cellSize={1} cellColor={"purple"} cellThickness={0.1} sectionColor={[0.5, 0.5, 10] as any}/>
+        <Grid args={[gelatinousCubes.length, gelatinousCubes.length]} position={[-0.5, -0.45, -0.5]} cellSize={1} cellColor={"purple"} cellThickness={0.1} sectionColor={[0.5, 0.5, 10] as any}/>
         {
           slimePaths.map((row, rowIndex) => {
             return row.map((slimePlayerNumber, columnIndex) => {
               const cubePlayerNumber = gelatinousCubes[rowIndex][columnIndex];
-              const cubeXIndex = rowIndex - boardSize / 2;
-              const cubeZIndex = columnIndex - boardSize / 2;
+
+              let triggerDeathAnimation = false;
+              if (gameState[gameStateIndex + 1]) {
+                const { gelatinousCubes: nextGelatinousCubes } = gameState[gameStateIndex + 1];
+                const nextPlayerNumer = nextGelatinousCubes[rowIndex][columnIndex];
+                triggerDeathAnimation = cubePlayerNumber !== null && nextPlayerNumer === null;
+              }
+
+              const xIndex = rowIndex - boardSize / 2;
+              const zIndex = columnIndex - boardSize / 2;
               
-              return <group key={`${cubeXIndex}${cubeZIndex}${slimePlayerNumber}`}>
-                {cubePlayerNumber !== null ? <GelatinousCube material={cubeMaterials[cubePlayerNumber]} position={[cubeXIndex, 0.3, cubeZIndex]} aboveBoard={true}/> : null }
-                {slimePlayerNumber !== null ? <Slime material={slimeMaterials[slimePlayerNumber]} position={[cubeXIndex, -0.35, cubeZIndex]}/> : null }
+              return <group key={`${xIndex}${zIndex}${slimePlayerNumber}`}>
+                {cubePlayerNumber !== null ? <GelatinousCube xIndex={xIndex} zIndex={zIndex} shouldDie={triggerDeathAnimation} animationDuration={animationDuration} material={cubeMaterials[cubePlayerNumber]}/> : null }
+                {slimePlayerNumber !== null ? <Slime xIndex={xIndex} zIndex={zIndex} material={slimeMaterials[slimePlayerNumber]}/> : null }
               </group>
             })
           })
