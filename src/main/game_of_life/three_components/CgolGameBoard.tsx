@@ -1,8 +1,7 @@
 import { Grid, Plane, PerformanceMonitor, OrbitControls } from "@react-three/drei";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
-import { useDrag } from '@use-gesture/react'
 import { Suspense, useContext, useEffect, useState } from "react";
-import { Color, Intersection } from "three";
+import { Color } from "three";
 import AdaptivePixelRatio from "../../shared_three_components/AdaptivePixelRatio";
 import { gameColors } from "../../color";
 import { GameEngineContext } from "../game_engine/GameEngine";
