@@ -1,5 +1,6 @@
-import { Grid, Plane, RoundedBox, PerformanceMonitor, OrbitControls } from "@react-three/drei";
+import { Grid, Plane, PerformanceMonitor, OrbitControls } from "@react-three/drei";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
+import { useDrag } from '@use-gesture/react'
 import { Suspense, useContext, useEffect, useState } from "react";
 import { Color, Intersection } from "three";
 import AdaptivePixelRatio from "../../shared_three_components/AdaptivePixelRatio";
@@ -14,6 +15,7 @@ const CgolGameBoard = () => {
   // State of the board game from context
   const { 
     isDemo, 
+    isDrawing,
     gameState, 
     gameStateIndex, 
     currentOrganismIndex,
@@ -33,6 +35,9 @@ const CgolGameBoard = () => {
     const lightenedColor = new Color(Object.values(color)[0]).lerp(new Color("white"), 0.2)
     return <meshStandardMaterial color={lightenedColor} />
   }));
+
+  // Input tracking
+  const [pointerDown, setPointerDown] = useState(false);
 
   // Get the board size
   const boardSize = gelatinousCubes.length;
@@ -55,11 +60,10 @@ const CgolGameBoard = () => {
   }, [gameState, gameStateIndex])
 
   // Handle adding a cube
-  const handleAddGelatinousCube = (clickEvent: ThreeEvent<MouseEvent>) => {
-    // Don't update if clicking step cube
-    if (clickEvent.intersections.some((intersection: Intersection) => intersection.object.name === "StepCube")) {
-      return;
-    }
+  const handleAddGelatinousCube = (clickEvent: ThreeEvent<PointerEvent>) => {
+    
+    // If the pointer is not down, do nothing
+    if (!pointerDown || !isDrawing) return;
 
     // Get the cubes position from the click event
     const { x, z } = clickEvent.intersections[0].point;
@@ -75,7 +79,7 @@ const CgolGameBoard = () => {
       <Canvas id="three-canvas" camera={{ fov:50, position: camPosition }}>
         <PerformanceMonitor>
           <AdaptivePixelRatio />
-          <OrbitControls autoRotate={isDemo} autoRotateSpeed={1.5}/>
+          <OrbitControls autoRotate={isDemo} autoRotateSpeed={1.5} enabled={!isDrawing}/>
             <Grid args={[gelatinousCubes.length, gelatinousCubes.length]} position={[-0.5, -0.45, -0.5]} cellSize={1} cellColor={"purple"} cellThickness={0.1} sectionColor={[0.5, 0.5, 10] as any}/>
             {
               slimePaths.map((row, rowIndex) => {
@@ -99,7 +103,9 @@ const CgolGameBoard = () => {
                 })
               })
             }
-            <Plane name={"GameBoard"} args={[boardSize, boardSize]} onClick={(e) => handleAddGelatinousCube(e)} rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, -0.5, -0.5]} receiveShadow>
+            <Plane name={"GameBoard"} args={[boardSize, boardSize]} 
+              onPointerDown={() => setPointerDown(true)} onPointerUp={() => setPointerDown(false)}
+              onPointerMove={e => handleAddGelatinousCube(e)} rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, -0.5, -0.5]} receiveShadow>
               <meshToonMaterial color="#1E313B"/>
             </Plane>
           <Lights />
