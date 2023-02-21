@@ -3,7 +3,7 @@ import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { Suspense, useContext, useEffect, useState } from "react";
 import { Color, Intersection } from "three";
 import AdaptivePixelRatio from "../../shared_three_components/AdaptivePixelRatio";
-import { colors } from "../../color";
+import { gameColors } from "../../color";
 import { GameEngineContext } from "../game_engine/GameEngine";
 import GelatinousCube from "../../shared_three_components/GelatinousCube";
 import Lights from "../../shared_three_components/Lights";
@@ -16,38 +16,26 @@ const CgolGameBoard = () => {
     isDemo, 
     gameState, 
     gameStateIndex, 
+    currentOrganismIndex,
     advanceGameState, 
     addGelatinousCube,
     requestNextGameState,
   } = useContext(GameEngineContext);
   const { gelatinousCubes, slimePaths } = gameState[gameStateIndex];
 
-  // State of current player
-  // TODO: Life this into context
-  const [ currentPlayerNumber, setCurrentPlayerNumber ] = useState(0);
-
   // Game configuration
   const [animationDuration] = useState(200)
   const camPosition: [number, number, number] = isDemo ? [15, 10, 15] : [50, 30, 50]
 
   // Reusable three materials
-  const [ cubeMaterials ] = useState(colors.map(color => <meshStandardMaterial color={color} />))
-  const [ slimeMaterials ] = useState(colors.map(color => {
-    const lightenedColor = new Color(color).lerp(new Color("white"), 0.2)
+  const [ cubeMaterials ] = useState(gameColors.map(color => <meshStandardMaterial color={Object.values(color)[0]} />))
+  const [ slimeMaterials ] = useState(gameColors.map(color => {
+    const lightenedColor = new Color(Object.values(color)[0]).lerp(new Color("white"), 0.2)
     return <meshStandardMaterial color={lightenedColor} />
   }));
 
   // Get the board size
   const boardSize = gelatinousCubes.length;
-
-  // Handle the player input
-  const handleChangePlayerKeyBoardInput = (e: KeyboardEvent) => { if (e.key === "Shift") { 
-    setCurrentPlayerNumber((currentPlayerNumber + 1) % 8) 
-  }};
-
-  const handleChangePlayer = () => {
-    setCurrentPlayerNumber((currentPlayerNumber + 1) % 8)
-  }
 
   useEffect(() => {
     let requestNextGameStateInterval: NodeJS.Timer;
@@ -66,13 +54,6 @@ const CgolGameBoard = () => {
     }
   }, [gameState, gameStateIndex])
 
-  useEffect(() => {
-    document.addEventListener('keydown', handleChangePlayerKeyBoardInput)
-    return () => {
-      document.removeEventListener('keydown', handleChangePlayerKeyBoardInput)
-    }
-  }, [currentPlayerNumber])
-
   // Handle adding a cube
   const handleAddGelatinousCube = (clickEvent: ThreeEvent<MouseEvent>) => {
     // Don't update if clicking step cube
@@ -86,7 +67,7 @@ const CgolGameBoard = () => {
     const adjustedZ = Math.round(z);
     const cubeXIndex = adjustedX + boardSize / 2;
     const cubeZIndex = adjustedZ + boardSize / 2;
-    addGelatinousCube(cubeXIndex, cubeZIndex, currentPlayerNumber);
+    addGelatinousCube(cubeXIndex, cubeZIndex, currentOrganismIndex);
   }
   
   return (
@@ -95,13 +76,6 @@ const CgolGameBoard = () => {
         <PerformanceMonitor>
           <AdaptivePixelRatio />
           <OrbitControls autoRotate={isDemo} autoRotateSpeed={1.5}/>
-      
-            {isDemo ? null : <RoundedBox name={"StepCube"} onClick={requestNextGameState} args={[1, 1, 1]} position={[0,5,0]}>
-              <meshStandardMaterial color={"red"} />
-            </RoundedBox> }
-            { isDemo ? null : <RoundedBox name={"StepCube"} onClick={handleChangePlayer} args={[1, 1, 1]} position={[3,5,0]}>
-              <meshStandardMaterial color={colors[currentPlayerNumber]} />
-            </RoundedBox> }
             <Grid args={[gelatinousCubes.length, gelatinousCubes.length]} position={[-0.5, -0.45, -0.5]} cellSize={1} cellColor={"purple"} cellThickness={0.1} sectionColor={[0.5, 0.5, 10] as any}/>
             {
               slimePaths.map((row, rowIndex) => {
