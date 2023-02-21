@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
-import { addNewOrganism } from './game_logic/addNewOrganism';
-import { duplicateArrayOfArrays } from '../utils';
+import { duplicateArrayOfArrays } from '../../utils';
+import { addNewOrganism } from './addNewOrganism';
 
 export interface GamePieces {
   gelatinousCubes: (number | null)[][];
@@ -41,7 +41,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
 
   // Create a worker to handle the game logic
   const gameEngineWorkerRef = useRef(
-    new Worker(new URL('./game_logic/workers/gamePhaseWorker.ts', import.meta.url), { type: 'module' }));
+    new Worker(new URL('./workers/gamePhaseWorker.ts', import.meta.url), { type: 'module' }));
   
   // Add random cubes
   useEffect(() => {
@@ -101,7 +101,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
     <GameEngineContext.Provider value={{ 
       isDemo, gameState, gameStateIndex,
       requestNextGameState,
-      advanceGameState, 
+      advanceGameState,
       addGelatinousCube: isDemo ? () => {} : addGelatinousCube  }}>
       {children}
     </GameEngineContext.Provider>

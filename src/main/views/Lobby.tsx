@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
-import { GameEngine } from "../game_engine/GameEngineContext";
+import { GameEngine } from "../game_of_life/game_engine/GameEngine";
 import { PeerConnectionsContext } from "../peer_communication/PeerContext";
-import GameGraphics from "../three_components/GameGraphics";
+import GameBoard from "../game_of_life/three_components/CgolGameBoard";
 
 // Props for the lobby componet
 interface LobbyProps {
@@ -33,8 +33,8 @@ const Lobby = (props: LobbyProps) => {
         <h1 className="mt-6 text-4xl font-bold text-white">Lobby</h1>
         <div className="mt-2 font-bold text-white py-4">{`Your name is: ${id}, you Slimey Slime.`}</div>
         <div className="container mt-4 h-3/4">
-          <GameEngine boardSize={30} isDemo={true}>
-            <GameGraphics monitorPerf={false}/>
+          <GameEngine boardSize={50} isDemo={true}>
+            <GameBoard />
           </GameEngine>
         </div>
       </div>

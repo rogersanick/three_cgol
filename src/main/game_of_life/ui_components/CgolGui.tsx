@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const GameGui: React.FC = () => {
+const CgolGui: React.FC = () => {
   const [open, setOpen] = useState(true);
   return (
     <div className={`transition-all ${open ? "" : "translate-x-full"} absolute bottom-0 w-screen z-10 h-1/6 flex justify-center content-between`}>
@@ -13,4 +13,4 @@ const GameGui: React.FC = () => {
   );
 };
 
-export default GameGui;
+export default CgolGui;

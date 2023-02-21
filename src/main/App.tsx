@@ -1,20 +1,18 @@
 import React, { Suspense, useState } from "react";
-import { PeerConnections } from "./peer_communication/PeerContext";
-import LoadingIndicator from "./ui_components/LoadingIndicator";
+import LoadingIndicator from "./shared_ui_components/LoadingIndicator";
 
 const App = () => {
 
-  const [gameStarted, setGameStarted] = useState(false);
-  const Lobby = React.lazy(() => import('./views/Lobby'));
-  const Game = React.lazy(() => import('./views/Game'));
+  const [cgolGameStarted, setCgolGameStarted] = useState(false);
+  // const Lobby = React.lazy(() => import('./views/Lobby'));
+  const Landing = React.lazy(() => import('./views/Landing'));
+  const CgolGame = React.lazy(() => import('./views/CgolGame'));
   return (
     <div className="h-screen w-screen bg-slate-800">
       <Suspense fallback={<LoadingIndicator/>}>
-        <PeerConnections>
-          { gameStarted ?
-          <Game /> :
-          <Lobby startGame={() => setGameStarted(true)} /> }
-        </PeerConnections>
+        { cgolGameStarted ?
+        <CgolGame /> :
+        <Landing startGame={() => setCgolGameStarted(true)} /> }
       </Suspense>
     </div>
   );

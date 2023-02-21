@@ -1,4 +1,4 @@
-import { GamePieces } from "../GameEngineContext";
+import { GamePieces } from "./GameEngine";
 import { duplicateArrayOfArrays } from "../../utils";
 
 // Utility function to add organisms
