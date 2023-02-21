@@ -29,11 +29,8 @@ const CgolGameBoard = () => {
   const camPosition: [number, number, number] = isDemo ? [15, 10, 15] : [50, 30, 50]
 
   // Reusable three materials
-  const [ cubeMaterials ] = useState(gameColors.map(color => <meshStandardMaterial color={Object.values(color)[0]} />))
-  const [ slimeMaterials ] = useState(gameColors.map(color => {
-    const lightenedColor = new Color(Object.values(color)[0]).lerp(new Color("white"), 0.2)
-    return <meshStandardMaterial color={lightenedColor} />
-  }));
+  const [ cubeMaterials ] = useState(gameColors.map(color => <meshStandardMaterial color={color.mainHex} />))
+  const [ slimeMaterials ] = useState(gameColors.map(color => <meshStandardMaterial color={color.lightHex} />))
 
   // Input tracking
   const [pointerDown, setPointerDown] = useState(false);
