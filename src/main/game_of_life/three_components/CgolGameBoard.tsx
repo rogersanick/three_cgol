@@ -15,6 +15,7 @@ const CgolGameBoard = () => {
     isDemo, 
     isPlaying,
     isDrawing,
+    animationDuration,
     gameState, 
     gameStateIndex, 
     currentOrganismIndex,
@@ -25,7 +26,6 @@ const CgolGameBoard = () => {
   const { gelatinousCubes, slimePaths } = gameState[gameStateIndex];
 
   // Game configuration
-  const [animationDuration] = useState(200)
   const camPosition: [number, number, number] = isDemo ? [15, 10, 15] : [50, 30, 50]
 
   // Reusable three materials
@@ -43,9 +43,10 @@ const CgolGameBoard = () => {
     
     // Demo logic
     if (isPlaying) {
-      requestNextGameStateInterval = setInterval(requestNextGameState, 500)
+      requestNextGameStateInterval = setInterval(requestNextGameState, animationDuration)
     }
 
+    console.log(animationDuration)
     if (gameStateIndex === gameState.length - 2) {
       setTimeout(advanceGameState, animationDuration)
     }
@@ -53,7 +54,7 @@ const CgolGameBoard = () => {
     return () => { 
       requestNextGameStateInterval && clearInterval(requestNextGameStateInterval)
     }
-  }, [gameState, gameStateIndex, isPlaying])
+  }, [gameState, gameStateIndex, isPlaying, animationDuration])
 
   // Handle adding a cube
   const handleAddGelatinousCube = (clickEvent: ThreeEvent<PointerEvent>) => {

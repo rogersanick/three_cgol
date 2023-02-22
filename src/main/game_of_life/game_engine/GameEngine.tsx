@@ -11,13 +11,15 @@ export interface GamePieces {
 export interface GameEngineContextType {
   gameState: GamePieces[];
   gameStateIndex: number;
+  currentOrganismIndex: number;
+  animationDuration: number;
   isDemo: boolean;
   isPlaying: boolean;
   isDrawing: boolean;
-  currentOrganismIndex: number;
   setIsDrawing: (isDrawing: boolean) => void;
   setIsPlaying: (isPlaying: boolean) => void;
   setCurrentOrganismIndex: (index: number) => void;
+  setAnimationDuration: (duration: number) => void;
   addGelatinousCube: (x: number, y: number, playerNumber: number) => void;
   advanceGameState: () => void;
   requestNextGameState: () => void;
@@ -30,13 +32,15 @@ const GameEngineContext = React.createContext<GameEngineContextType>({
     slimePaths: [] as (number | null)[][],
   }],
   gameStateIndex: 0,
+  currentOrganismIndex: 0,
+  animationDuration: 200,
   isDemo: false,
   isPlaying: false,
   isDrawing: false,
-  currentOrganismIndex: 0,
   setIsDrawing: () => {}, 
   setIsPlaying: () => {},
   setCurrentOrganismIndex: () => {},
+  setAnimationDuration: () => {},
   addGelatinousCube: (_: number, __: number, ___: number) => {},
   advanceGameState: () => {},
   requestNextGameState: () => {},
@@ -53,6 +57,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
   const [currentOrganismIndex, setCurrentOrganismIndex] = useState(0);
   const [isDrawing, setIsDrawing] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [animationDuration, setAnimationDuration] = useState(200);
 
   // Create a worker to handle the game logic
   const gameEngineWorkerRef = useRef(
@@ -120,11 +125,12 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
 
   return (
     <GameEngineContext.Provider value={{ 
-      isDemo, gameState, gameStateIndex,
+      isDemo, gameState, gameStateIndex, animationDuration,
       currentOrganismIndex, isDrawing, isPlaying,
       setIsDrawing,
       setIsPlaying,
       setCurrentOrganismIndex,
+      setAnimationDuration,
       requestNextGameState,
       advanceGameState,
       addGelatinousCube: isDemo ? () => {} : addGelatinousCube  }}>

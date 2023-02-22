@@ -1,18 +1,23 @@
 import React, { useContext, useState } from 'react';
 import { gameColors } from '../../color';
 import { GameEngineContext } from '../game_engine/GameEngine';
+import { GiRabbit, GiSeaTurtle } from 'react-icons/gi';
 
 const CgolGui: React.FC = () => {
   const [open, setOpen] = useState(true);
 
   const { 
-    isDrawing, currentOrganismIndex, isPlaying, 
-    setIsDrawing, setCurrentOrganismIndex, setIsPlaying,
-    requestNextGameState } = useContext(GameEngineContext);
+    isDrawing, currentOrganismIndex, isPlaying, animationDuration,
+    setAnimationDuration, setIsDrawing, setCurrentOrganismIndex, 
+    setIsPlaying, requestNextGameState } = useContext(GameEngineContext);
 
   // Increment the color by one or resent to 0
   const changeColor = (index: number) => {
     setCurrentOrganismIndex(index);
+  }
+  
+  const handleAnimationDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAnimationDuration(parseFloat(e.target.value));
   }
 
   return (
@@ -28,6 +33,13 @@ const CgolGui: React.FC = () => {
               );
             })}
           </div>
+          <div className="w-1/2 flex flex-row items-center mt-6 self-center">
+            <GiSeaTurtle className="mx-2" size={"2rem"}/>
+            <input id="generation_speed" type="range" min="50" max="800" step="50" 
+              onChange={handleAnimationDurationChange}
+              value={animationDuration} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"></input>
+            <GiRabbit className="mx-2" size={"2rem"}/>
+          </div>  
           <div className="flex flex-row items-center justify-around mt-6">
             <button onClick={() => {
               setIsDrawing(!isDrawing);
