@@ -17,7 +17,6 @@ const CgolGui: React.FC = () => {
 
   return (
     <div className={`transition-all ${open ? "" : "translate-x-full"} absolute bottom-10 w-screen z-10 h-min flex justify-center content-between`}>
-      <button className='w-4 h-4 border-gray-300 bg-gray-500 rounded-full text-white self-end text-xs text-center' onClick={() => setOpen(false)}>x</button>
       <div className="w-10/12 container rounded bg-gray-100 bg-opacity-50 px-2 py-2 flex flex-col justify-around">
           <div className="h-full grid grid-cols-9 overflow-scroll snap-start">
             { gameColors.map((color, index) => {
