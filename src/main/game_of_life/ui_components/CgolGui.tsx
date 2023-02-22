@@ -34,11 +34,11 @@ const CgolGui: React.FC = () => {
             })}
           </div>
           <div className="w-2/3 flex flex-row items-center mt-2 self-center">
-            <GiSeaTurtle className="mx-2" size={"2rem"}/>
+            <GiRabbit className="mx-2" size={"2rem"}/>
             <input id="generation_speed" type="range" min="50" max="800" step="50" 
               onChange={handleAnimationDurationChange}
               value={animationDuration} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"></input>
-            <GiRabbit className="mx-2" size={"2rem"}/>
+            <GiSeaTurtle className="mx-2" size={"2rem"}/>
           </div>  
           <div className="flex flex-row items-center justify-around mt-2">
             <button onClick={() => {

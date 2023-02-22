@@ -1,4 +1,4 @@
-import { Grid, Plane, PerformanceMonitor, OrbitControls } from "@react-three/drei";
+import { Grid, Plane, PerformanceMonitor, OrbitControls, MeshWobbleMaterial } from "@react-three/drei";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { Suspense, useContext, useEffect, useState } from "react";
 import AdaptivePixelRatio from "../../shared_three_components/AdaptivePixelRatio";
@@ -29,7 +29,7 @@ const CgolGameBoard = () => {
   const camPosition: [number, number, number] = isDemo ? [15, 10, 15] : [50, 30, 50]
 
   // Reusable three materials
-  const [ cubeMaterials ] = useState(gameColors.map(color => <meshStandardMaterial color={color.mainHex} />))
+  const [ cubeMaterials ] = useState(gameColors.map(color => <MeshWobbleMaterial speed={5} factor={0.1} color={color.mainHex} />))
   const [ slimeMaterials ] = useState(gameColors.map(color => <meshStandardMaterial color={color.lightHex} />))
 
   // Input tracking

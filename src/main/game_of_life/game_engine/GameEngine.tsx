@@ -57,12 +57,15 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
   const [currentOrganismIndex, setCurrentOrganismIndex] = useState(0);
   const [isDrawing, setIsDrawing] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [animationDuration, setAnimationDuration] = useState(200);
+  const [animationDuration, setAnimationDuration] = useState(300);
 
   // Create a worker to handle the game logic
-  const gameEngineWorkerRef = useRef(
-    new Worker(new URL('./workers/gamePhaseWorker.ts', import.meta.url), { type: 'module' }));
-  
+  const gameEngineWorkerRef = useRef<Worker>(null!)
+  useEffect(() => {
+    gameEngineWorkerRef.current = new Worker(new URL('./workers/gamePhaseWorker.ts', import.meta.url), { type: 'module' })
+    return () => { gameEngineWorkerRef.current.terminate() }
+  }, [])
+
   useEffect(() => {
     if (isDemo) {
       setIsPlaying(true)
