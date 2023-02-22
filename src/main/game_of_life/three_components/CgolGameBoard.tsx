@@ -46,7 +46,6 @@ const CgolGameBoard = () => {
       requestNextGameStateInterval = setInterval(requestNextGameState, animationDuration)
     }
 
-    console.log(animationDuration)
     if (gameStateIndex === gameState.length - 2) {
       setTimeout(advanceGameState, animationDuration)
     }
