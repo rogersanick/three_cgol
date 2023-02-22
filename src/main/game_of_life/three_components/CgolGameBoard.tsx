@@ -57,7 +57,7 @@ const CgolGameBoard = () => {
   }, [gameState, gameStateIndex, isPlaying, animationDuration])
 
   // Handle adding a cube
-  const handleAddGelatinousCube = (clickEvent: ThreeEvent<PointerEvent>) => {
+  const handleAddGelatinousCube = (clickEvent: ThreeEvent<PointerEvent | MouseEvent>) => {
     
     // If the pointer is not down, do nothing
     if (!pointerDown || !isDrawing) return;
@@ -100,7 +100,8 @@ const CgolGameBoard = () => {
                 })
               })
             }
-            <Plane name={"GameBoard"} args={[boardSize, boardSize]} 
+            <Plane name={"GameBoard"} args={[boardSize, boardSize]}
+              onClick={e => handleAddGelatinousCube(e)} 
               onPointerDown={() => setPointerDown(true)} onPointerUp={() => setPointerDown(false)}
               onPointerMove={e => handleAddGelatinousCube(e)} rotation={[-Math.PI / 2, 0, 0]} position={[-0.5, -0.5, -0.5]} receiveShadow>
               <meshToonMaterial color="#1E313B"/>

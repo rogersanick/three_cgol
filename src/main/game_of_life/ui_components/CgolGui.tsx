@@ -4,7 +4,7 @@ import { GameEngineContext } from '../game_engine/GameEngine';
 import { GiRabbit, GiSeaTurtle } from 'react-icons/gi';
 
 const CgolGui: React.FC = () => {
-  const [open, setOpen] = useState(true);
+  const [open] = useState(true);
 
   const { 
     isDrawing, currentOrganismIndex, isPlaying, animationDuration,
