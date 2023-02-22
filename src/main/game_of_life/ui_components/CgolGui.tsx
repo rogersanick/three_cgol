@@ -33,14 +33,14 @@ const CgolGui: React.FC = () => {
             <button onClick={() => {
               setIsDrawing(!isDrawing);
             }} className="rounded-full bg-indigo-600 py-2 px-4 text-sm font-medium text-white">
-              {isDrawing ? "Camera" : "Create"}
+              {isDrawing ? "Click to Look" : "Click to Create"}
             </button>
             <button onClick={() => {
               requestNextGameState();
             }} className="rounded-full bg-indigo-600 py-2 px-4 text-sm font-medium text-white">Decay</button>
             <button onClick={() => {
               setIsPlaying(!isPlaying);
-            }} className="rounded-full bg-indigo-600 py-2 px-4 text-sm font-medium text-white">{isPlaying ? "Pause" : "Play"}</button>
+            }} className="rounded-full bg-indigo-600 py-2 px-4 text-sm font-medium text-white">{isPlaying ? "⏸️" : "▶️"}</button>
           </div>
       </div>
     </div>
