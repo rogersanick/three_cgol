@@ -1,7 +1,6 @@
 import { Grid, Plane, PerformanceMonitor, OrbitControls } from "@react-three/drei";
 import { Canvas, ThreeEvent } from "@react-three/fiber";
 import { Suspense, useContext, useEffect, useState } from "react";
-import { Color } from "three";
 import AdaptivePixelRatio from "../../shared_three_components/AdaptivePixelRatio";
 import { gameColors } from "../../color";
 import { GameEngineContext } from "../game_engine/GameEngine";
@@ -14,6 +13,7 @@ const CgolGameBoard = () => {
   // State of the board game from context
   const { 
     isDemo, 
+    isPlaying,
     isDrawing,
     gameState, 
     gameStateIndex, 
@@ -42,7 +42,7 @@ const CgolGameBoard = () => {
     let requestNextGameStateInterval: NodeJS.Timer;
     
     // Demo logic
-    if (isDemo) {
+    if (isPlaying) {
       requestNextGameStateInterval = setInterval(requestNextGameState, 500)
     }
 
@@ -53,7 +53,7 @@ const CgolGameBoard = () => {
     return () => { 
       requestNextGameStateInterval && clearInterval(requestNextGameStateInterval)
     }
-  }, [gameState, gameStateIndex])
+  }, [gameState, gameStateIndex, isPlaying])
 
   // Handle adding a cube
   const handleAddGelatinousCube = (clickEvent: ThreeEvent<PointerEvent>) => {
@@ -92,7 +92,7 @@ const CgolGameBoard = () => {
                   const xIndex = rowIndex - boardSize / 2;
                   const zIndex = columnIndex - boardSize / 2;
                   
-                  return <group key={`${xIndex}${zIndex}${slimePlayerNumber}`}>
+                  return <group key={`x:${xIndex}z:${zIndex}pnum:${slimePlayerNumber}`}>
                     {cubePlayerNumber !== null ? <GelatinousCube xIndex={xIndex} zIndex={zIndex} shouldDie={triggerDeathAnimation} animationDuration={animationDuration} material={cubeMaterials[cubePlayerNumber]}/> : null }
                     {slimePlayerNumber !== null ? <Slime xIndex={xIndex} zIndex={zIndex} material={slimeMaterials[slimePlayerNumber]}/> : null }
                   </group>

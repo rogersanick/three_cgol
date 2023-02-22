@@ -12,9 +12,11 @@ export interface GameEngineContextType {
   gameState: GamePieces[];
   gameStateIndex: number;
   isDemo: boolean;
+  isPlaying: boolean;
   isDrawing: boolean;
   currentOrganismIndex: number;
   setIsDrawing: (isDrawing: boolean) => void;
+  setIsPlaying: (isPlaying: boolean) => void;
   setCurrentOrganismIndex: (index: number) => void;
   addGelatinousCube: (x: number, y: number, playerNumber: number) => void;
   advanceGameState: () => void;
@@ -29,9 +31,11 @@ const GameEngineContext = React.createContext<GameEngineContextType>({
   }],
   gameStateIndex: 0,
   isDemo: false,
+  isPlaying: false,
   isDrawing: false,
   currentOrganismIndex: 0,
-  setIsDrawing: () => {},  
+  setIsDrawing: () => {}, 
+  setIsPlaying: () => {},
   setCurrentOrganismIndex: () => {},
   addGelatinousCube: (_: number, __: number, ___: number) => {},
   advanceGameState: () => {},
@@ -48,11 +52,18 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
   const [gameStateIndex, setGameStateIndex] = useState(0);
   const [currentOrganismIndex, setCurrentOrganismIndex] = useState(0);
   const [isDrawing, setIsDrawing] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   // Create a worker to handle the game logic
   const gameEngineWorkerRef = useRef(
     new Worker(new URL('./workers/gamePhaseWorker.ts', import.meta.url), { type: 'module' }));
   
+  useEffect(() => {
+    if (isDemo) {
+      setIsPlaying(true)
+    }
+  }, [isDemo])
+
   // Add random cubes
   useEffect(() => {
     // Handle responses from the game logic worker
@@ -110,8 +121,9 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
   return (
     <GameEngineContext.Provider value={{ 
       isDemo, gameState, gameStateIndex,
-      currentOrganismIndex, isDrawing,
+      currentOrganismIndex, isDrawing, isPlaying,
       setIsDrawing,
+      setIsPlaying,
       setCurrentOrganismIndex,
       requestNextGameState,
       advanceGameState,
