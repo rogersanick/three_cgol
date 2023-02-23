@@ -1,12 +1,13 @@
-import { Grid, Plane, PerformanceMonitor, OrbitControls, MeshWobbleMaterial } from "@react-three/drei";
-import { Canvas, ThreeEvent } from "@react-three/fiber";
-import { Suspense, useContext, useEffect, useState } from "react";
+import { Grid, Plane, PerformanceMonitor, OrbitControls, MeshWobbleMaterial, MeshDistortMaterial } from "@react-three/drei";
+import { Canvas, ThreeEvent, useFrame } from "@react-three/fiber";
+import { Suspense, useContext, useEffect, useRef, useState } from "react";
 import AdaptivePixelRatio from "../../shared_three_components/AdaptivePixelRatio";
 import { gameColors } from "../../color";
 import { GameEngineContext } from "../game_engine/GameEngine";
 import GelatinousCube from "../../shared_three_components/GelatinousCube";
 import Lights from "../../shared_three_components/Lights";
 import Slime from "../../shared_three_components/Slime";
+import { MathUtils } from "three";
 
 const CgolGameBoard = () => {
 
@@ -27,10 +28,6 @@ const CgolGameBoard = () => {
 
   // Game configuration
   const camPosition: [number, number, number] = isDemo ? [15, 10, 15] : [50, 30, 50]
-
-  // Reusable three materials
-  const [ cubeMaterials ] = useState(gameColors.map(color => <MeshWobbleMaterial speed={5} factor={0.1} color={color.mainHex} />))
-  const [ slimeMaterials ] = useState(gameColors.map(color => <meshStandardMaterial color={color.lightHex} />))
 
   // Input tracking
   const [pointerDown, setPointerDown] = useState(false);
@@ -93,8 +90,8 @@ const CgolGameBoard = () => {
                   const zIndex = columnIndex - boardSize / 2;
                   
                   return <group key={`x:${xIndex}z:${zIndex}pnum:${slimePlayerNumber}`}>
-                    {cubePlayerNumber !== null ? <GelatinousCube xIndex={xIndex} zIndex={zIndex} shouldDie={triggerDeathAnimation} animationDuration={animationDuration} material={cubeMaterials[cubePlayerNumber]}/> : null }
-                    {slimePlayerNumber !== null ? <Slime xIndex={xIndex} zIndex={zIndex} material={slimeMaterials[slimePlayerNumber]}/> : null }
+                    {cubePlayerNumber !== null ? <GelatinousCube xIndex={xIndex} zIndex={zIndex} shouldDie={triggerDeathAnimation} animationDuration={animationDuration} playerIndex={slimePlayerNumber!}/> : null }
+                    {slimePlayerNumber !== null ? <Slime xIndex={xIndex} zIndex={zIndex} playerIndex={slimePlayerNumber!}/> : null }
                   </group>
                 })
               })

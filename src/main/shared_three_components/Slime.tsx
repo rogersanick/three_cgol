@@ -1,14 +1,16 @@
 import { Box } from "@react-three/drei"
-import { memo } from "react"
+import { memo, useMemo, useState } from "react"
+import { gameColors } from "../color"
 
 const Slime = (props: { 
-  xIndex: number, zIndex: number, material: JSX.Element
+  xIndex: number, zIndex: number, playerIndex: number
 }) => {
-  const { material, xIndex, zIndex } = props
+  const { playerIndex, xIndex, zIndex } = props
   const position = [xIndex, -0.35, zIndex] as [number, number, number]
+  const [ slimeMaterials ] = useState(gameColors.map(color => useMemo(() => <meshStandardMaterial color={color.lightHex} />, [])))
   return (
     <Box position={position} args={[1,0.2,1]}>
-      {material}
+      {slimeMaterials[playerIndex]}
     </Box>
   )
 }
