@@ -45,7 +45,7 @@ const Landing = (props: LandingProps) => {
           setTimeout(() => {
             startGame();
           }, 500);
-        }} className="z-30 rounded-full bg-indigo-600 mt-12 w-24 h-20 text-xl text-white">Start</button>
+        }} className="z-30 border-solid border-2 border-white animate-gradient-x rounded-full mt-12 w-24 h-20 text-xl text-white">Start</button>
       <div className="container h-2/3 w-screen -mt-16">
         <GameEngine boardSize={30} isDemo={true}>
           <GameBoard />
