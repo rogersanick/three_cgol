@@ -8,8 +8,12 @@ const App = () => {
   const Landing = React.lazy(() => import('./views/Landing'));
   const CgolGame = React.lazy(() => import('./views/CgolGame'));
   return (
-    <div className="h-screen w-screen">
+      <div className="bg-slate-800 h-screen w-screen z-30">
       <Suspense fallback={<LoadingIndicator/>}>
+        { !cgolGameStarted && <video autoPlay muted loop className="opacity-40 z-0 w-full h-full absolute top-0 left-0 object-cover">
+            <source src="/app_background.mp4" type="video/mp4" />
+          </video>
+        }
         { cgolGameStarted ?
         <CgolGame /> :
         <Landing startGame={() => setCgolGameStarted(true)} /> }
