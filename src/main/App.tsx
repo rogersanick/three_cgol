@@ -8,7 +8,7 @@ const App = () => {
   const Landing = React.lazy(() => import('./views/Landing'));
   const CgolGame = React.lazy(() => import('./views/CgolGame'));
   return (
-    <div className="h-screen w-screen bg-slate-800">
+    <div className="h-screen w-screen">
       <Suspense fallback={<LoadingIndicator/>}>
         { cgolGameStarted ?
         <CgolGame /> :
