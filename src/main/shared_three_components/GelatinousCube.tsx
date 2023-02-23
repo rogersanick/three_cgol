@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import { memo, useEffect, useState } from "react"
 import { animated, config, useSpring } from "@react-spring/three"
 import { RoundedBoxGeometry } from "./RoundedBoxGeometry"
 
@@ -49,4 +49,4 @@ const GelatinousCube = (props: {
   )
 }
 
-export default React.memo(GelatinousCube)
+export default memo(GelatinousCube)

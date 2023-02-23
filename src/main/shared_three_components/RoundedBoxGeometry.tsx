@@ -1,5 +1,5 @@
 import { NamedArrayTuple } from '@react-three/drei/helpers/ts-utils'
-import * as React from 'react'
+import { useLayoutEffect, useMemo, useRef } from 'react'
 import { Shape, ExtrudeGeometry } from 'three'
 
 const eps = 0.00001
@@ -26,8 +26,8 @@ export const RoundedBoxGeometry = (
 ) => {
   const { args = [1, 1, 1], radius = 0.05, smoothness = 4, steps = 1, ...rest } = props
   const [width, height, depth] = args
-  const shape = React.useMemo(() => createShape(width, height, radius), [width, height, radius])
-  const params = React.useMemo(
+  const shape = useMemo(() => createShape(width, height, radius), [width, height, radius])
+  const params = useMemo(
     () => ({
       depth: depth - radius * 2,
       bevelEnabled: true,
@@ -39,9 +39,9 @@ export const RoundedBoxGeometry = (
     }),
     [depth, radius, smoothness]
   )
-  const geomRef = React.useRef<ExtrudeGeometry>(null!)
+  const geomRef = useRef<ExtrudeGeometry>(null!)
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (geomRef.current) {
       geomRef.current.center()
     }

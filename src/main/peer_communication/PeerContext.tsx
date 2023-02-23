@@ -1,5 +1,5 @@
 import Peer, { DataConnection } from 'peerjs';
-import React, { ReactNode, useEffect, useState } from 'react';
+import { createContext, ReactNode, useEffect, useState } from 'react';
 
 // This is the interface for the context
 interface PeerConnectionsContextType {
@@ -12,7 +12,7 @@ interface PeerConnectionsContextType {
 }
 
 // Instantiate context for tracking peers
-const PeerConnectionsContext = React.createContext<PeerConnectionsContextType>({
+const PeerConnectionsContext = createContext<PeerConnectionsContextType>({
   id: '',
   peerClient: {} as any,
   peerConnections: {},

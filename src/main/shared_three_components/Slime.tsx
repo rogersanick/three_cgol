@@ -1,5 +1,5 @@
 import { Box } from "@react-three/drei"
-import React from "react"
+import { memo } from "react"
 
 const Slime = (props: { 
   xIndex: number, zIndex: number, material: JSX.Element
@@ -13,4 +13,4 @@ const Slime = (props: {
   )
 }
 
-export default React.memo(Slime)
+export default memo(Slime)

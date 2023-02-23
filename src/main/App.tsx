@@ -1,12 +1,12 @@
-import React, { Suspense, useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import LoadingIndicator from "./shared_ui_components/LoadingIndicator";
 
 const App = () => {
 
   const [cgolGameStarted, setCgolGameStarted] = useState(false);
   // const Lobby = React.lazy(() => import('./views/Lobby'));
-  const Landing = React.lazy(() => import('./views/Landing'));
-  const CgolGame = React.lazy(() => import('./views/CgolGame'));
+  const Landing = lazy(() => import('./views/Landing'));
+  const CgolGame = lazy(() => import('./views/CgolGame'));
   return (
       <div className="bg-slate-800 h-screen w-screen z-30 overflow-hidden">
       <Suspense fallback={<LoadingIndicator/>}>

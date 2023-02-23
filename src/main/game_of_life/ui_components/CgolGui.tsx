@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { gameColors } from '../../color';
 import { GameEngineContext } from '../game_engine/GameEngine';
 import { GiRabbit, GiSeaTurtle } from 'react-icons/gi';
