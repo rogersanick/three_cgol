@@ -31,7 +31,7 @@ const Landing = (props: LandingProps) => {
         </div>
         <h2 className="mt-6 text-2xl md:text-4xl text-white">Conway's (Multi-Organism) Game of Life</h2>
         <h4 className="mt-4 text-s text-white md:text-lg md:text-center">
-          Hi! Thanks for visitng. I'm using Three.js (R3F) to build a decentralized board game called: 
+          Hi! Thanks for visiting. I'm using Three.js (R3F) to build a decentralized board game called: 
           <button onClick={() => setDisplayGameDescription(true)}><u>&nbsp;Flourish and Decay 👀.</u></button>
         </h4>
         <h4 className="mt-4 text-s text-white md:text-center">
