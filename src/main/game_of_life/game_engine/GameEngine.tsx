@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import { createContext, ReactNode, useEffect, useRef, useState } from 'react';
 import { duplicateArrayOfArrays } from '../../utils';
 import { addNewOrganism } from './addNewOrganism';
 
@@ -26,7 +26,7 @@ export interface GameEngineContextType {
 }
 
 // Instantiate the board game context
-const GameEngineContext = React.createContext<GameEngineContextType>({
+const GameEngineContext = createContext<GameEngineContextType>({
   gameState: [{
     gelatinousCubes: [] as (number | null)[][],
     slimePaths: [] as (number | null)[][],
