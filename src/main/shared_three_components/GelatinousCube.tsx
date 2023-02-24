@@ -2,8 +2,7 @@ import { memo, useEffect, useMemo, useRef, useState } from "react"
 import { animated, config, useSpring } from "@react-spring/three"
 import { RoundedBoxGeometry } from "./RoundedBoxGeometry"
 import { gameColors } from "../color"
-import { MeshDistortMaterial, MeshWobbleMaterial } from "@react-three/drei"
-import { BoxGeometry } from "three"
+import { MeshDistortMaterial } from "@react-three/drei"
 import { useFrame } from "@react-three/fiber"
 import { lerp } from "three/src/math/MathUtils"
 
@@ -12,10 +11,11 @@ const GelatinousCube = (props: {
   zIndex: number,
   playerIndex: number,
   animationDuration: number,
-  shouldDie: boolean
+  shouldDie: boolean,
+  cubeType?: "standard" | "wobble" | "distort",
 }) => {
   
-  const { xIndex, zIndex, playerIndex, shouldDie, animationDuration } = props
+  const { xIndex, zIndex, playerIndex, shouldDie, animationDuration, cubeType = "standard" } = props
   const alivePosition = [xIndex, 0.3, zIndex]
   const deadPosition = [xIndex, -1.5, zIndex]
 
@@ -25,9 +25,12 @@ const GelatinousCube = (props: {
 
   const ref = useRef({ distort: 0 })
   useFrame(() => {
-    ref.current.distort = lerp(ref.current.distort, 0.2, 0.2)
+    ref.current.distort = lerp(ref.current.distort, 0.3, 0.3)
   })
-  const [ cubeMaterials ] = useState(gameColors.map(color => useMemo(() => <MeshDistortMaterial ref={ref} speed={5} color={color.mainHex} />, [])))
+
+  const [ cubeDistortMaterials ] = useState(gameColors.map(color => useMemo(() => <MeshDistortMaterial ref={ref} speed={5} color={color.mainHex} />, [])))
+  const [ cubeWobbleMaterials ] = useState(gameColors.map(color => useMemo(() => <MeshDistortMaterial ref={ref} speed={5} color={color.mainHex} />, [])))
+  const [ cubeStandardMaterials ] = useState(gameColors.map(color => useMemo(() => <meshStandardMaterial color={color.mainHex} />, [])))
 
   // Get the animat position from whether or not the cube is alive
   const { animatedPosition } = useSpring({
@@ -51,10 +54,18 @@ const GelatinousCube = (props: {
     }
   })
 
+  const getMaterial = () => {
+    switch(cubeType) {
+      case "wobble": return cubeWobbleMaterials[playerIndex]
+      case "distort": return cubeDistortMaterials[playerIndex]  
+      default: return cubeStandardMaterials[playerIndex]
+    }
+  }
+
   return (
     // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
     <animated.mesh position={animatedPosition}>
-      {cubeMaterials[playerIndex]}
+      { getMaterial() }
       <RoundedBoxGeometry args={[1, 1, 1]} />
     </animated.mesh>
   )

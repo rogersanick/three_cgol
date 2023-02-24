@@ -1,6 +1,5 @@
-# Decay
-
-_A multi-organism Conway's Game of Life implementation. Constructed as a building block for the upcoming decentralized game, Flourish and Decay._
+# ThreeCGoL
+## _A multi-organism Conway's Game of Life implementation. Constructed as a building block for the upcoming decentralized game, Flourish and Decay._
 
 Welcome! Thanks for checking out this project. If you've been creating long enough, you've ruined something by making it too complicated. So I'm open-sourcing a 3D, multi-organism version of Conway's Game of Life. Enjoy!
 
