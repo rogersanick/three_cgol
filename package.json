@@ -16,10 +16,9 @@
   "repository": "github:benjaminmiles/react-three-vite",
   "license": "MIT",
   "dependencies": {
-    "@react-spring/three": "^9.6.1",
-    "@react-three/drei": "9.53.0",
-    "@react-three/fiber": "8.10.0",
-    "@react-three/rapier": "^0.11.3",
+    "@react-spring/three": "9.7.0",
+    "@react-three/drei": "9.56.27",
+    "@react-three/fiber": "8.11.5",
     "leva": "^0.9.34",
     "peerjs": "^1.4.7",
     "r3f-perf": "^7.0.1",
