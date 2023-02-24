@@ -6,6 +6,7 @@ import { GameEngineContext } from "../game_engine/GameEngine";
 import GelatinousCube from "../../shared_three_components/GelatinousCube";
 import Lights from "../../shared_three_components/Lights";
 import Slime from "../../shared_three_components/Slime";
+import { Perf } from "r3f-perf";
 
 const CgolGameBoard = () => {
 
@@ -18,6 +19,7 @@ const CgolGameBoard = () => {
     gameState, 
     gameStateIndex, 
     currentOrganismIndex,
+    showPerf,
     advanceGameState, 
     addGelatinousCube,
     requestNextGameState,
@@ -70,6 +72,7 @@ const CgolGameBoard = () => {
       <Canvas id="three-canvas" camera={{ fov:50, position: camPosition }}>
         <PerformanceMonitor>
           <AdaptivePixelRatio />
+          {showPerf && <Perf />}
           <OrbitControls autoRotate={isDemo} autoRotateSpeed={1.5} enabled={!isDrawing}/>
             <Grid args={[gelatinousCubes.length, gelatinousCubes.length]} position={[-0.5, -0.45, -0.5]} cellSize={1} cellColor={"purple"} cellThickness={0.1} sectionColor={[0.5, 0.5, 10] as any}/>
             {
