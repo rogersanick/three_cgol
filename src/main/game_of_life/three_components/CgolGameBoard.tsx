@@ -36,13 +36,6 @@ const CgolGameBoard = () => {
   // Get the board size
   const boardSize = gelatinousCubes.length;
 
-  // Solves bug w/ react-spring and react-three-fiber
-  useEffect(() => {
-    Globals.assign({
-      frameLoop: 'demand',
-    })
-  }, [])
-
   useEffect(() => {
     let requestNextGameStateInterval: NodeJS.Timer;
     
