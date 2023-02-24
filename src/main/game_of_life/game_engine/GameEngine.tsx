@@ -16,8 +16,11 @@ export interface GameEngineContextType {
   isDemo: boolean;
   isPlaying: boolean;
   isDrawing: boolean;
+  showPerf: boolean;
   setIsDrawing: (isDrawing: boolean) => void;
   setIsPlaying: (isPlaying: boolean) => void;
+  setIsDemo: (isDemo: boolean) => void;
+  setShowPerf: (showPerf: boolean) => void;
   setCurrentOrganismIndex: (index: number) => void;
   setAnimationDuration: (duration: number) => void;
   addGelatinousCube: (x: number, y: number, playerNumber: number) => void;
@@ -37,8 +40,11 @@ const GameEngineContext = createContext<GameEngineContextType>({
   isDemo: false,
   isPlaying: false,
   isDrawing: false,
+  showPerf: false,
   setIsDrawing: () => {}, 
   setIsPlaying: () => {},
+  setIsDemo: () => {},
+  setShowPerf: () => {},
   setCurrentOrganismIndex: () => {},
   setAnimationDuration: () => {},
   addGelatinousCube: (_: number, __: number, ___: number) => {},
@@ -46,7 +52,7 @@ const GameEngineContext = createContext<GameEngineContextType>({
   requestNextGameState: () => {},
 });
 
-const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boolean }> = ({ children, boardSize, isDemo }) => {
+const GameEngine: React.FC<{ children: ReactNode, boardSize: number, startDemo: boolean }> = ({ children, boardSize, startDemo }) => {
 
   // Build the representation of game pieces
   const [gameState, setGameState] = useState<GamePieces[]>([{
@@ -58,6 +64,8 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
   const [isDrawing, setIsDrawing] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [animationDuration, setAnimationDuration] = useState(300);
+  const [isDemo, setIsDemo] = useState(startDemo);
+  const [showPerf, setShowPerf] = useState(false);
 
   // Create a worker to handle the game logic
   const gameEngineWorkerRef = useRef<Worker>(null!)
@@ -129,9 +137,11 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, isDemo: boo
   return (
     <GameEngineContext.Provider value={{ 
       isDemo, gameState, gameStateIndex, animationDuration,
-      currentOrganismIndex, isDrawing, isPlaying,
+      currentOrganismIndex, isDrawing, isPlaying, showPerf,
       setIsDrawing,
       setIsPlaying,
+      setIsDemo,
+      setShowPerf,
       setCurrentOrganismIndex,
       setAnimationDuration,
       requestNextGameState,

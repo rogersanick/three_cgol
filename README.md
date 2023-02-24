@@ -17,7 +17,6 @@ Enter the fantastical realm of sentient slime, where players take the role of a 
 - [Drei](https://github.com/pmndrs/drei): React Three Fiber Helpers
 - [Three.js](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene): 3D Engine
 - [Vite](https://vitejs.dev/guide/): Static Web Server
-- [CodeSandbox](https://codesandbox.io/docs/configuration): Online Prototyping Container (optional)
 
 ### Installation
 
