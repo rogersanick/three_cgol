@@ -7,6 +7,7 @@ import GelatinousCube from "../../shared_three_components/GelatinousCube";
 import Lights from "../../shared_three_components/Lights";
 import Slime from "../../shared_three_components/Slime";
 import { Perf } from "r3f-perf";
+import { Globals } from "@react-spring/three";
 
 const CgolGameBoard = () => {
 
@@ -34,6 +35,13 @@ const CgolGameBoard = () => {
 
   // Get the board size
   const boardSize = gelatinousCubes.length;
+
+  // Solves bug w/ react-spring and react-three-fiber
+  useEffect(() => {
+    Globals.assign({
+      frameLoop: 'demand',
+    })
+  }, [])
 
   useEffect(() => {
     let requestNextGameStateInterval: NodeJS.Timer;

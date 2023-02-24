@@ -63,7 +63,7 @@ const GameEngine: React.FC<{ children: ReactNode, boardSize: number, startDemo: 
   const [currentOrganismIndex, setCurrentOrganismIndex] = useState(0);
   const [isDrawing, setIsDrawing] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [animationDuration, setAnimationDuration] = useState(300);
+  const [animationDuration, setAnimationDuration] = useState(400);
   const [isDemo, setIsDemo] = useState(startDemo);
   const [showPerf, setShowPerf] = useState(false);
 
