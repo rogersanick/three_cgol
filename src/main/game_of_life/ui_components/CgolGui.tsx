@@ -26,22 +26,6 @@ const CgolGui: React.FC = () => {
 
   return (
     <>
-      <div className="m-auto px-2 border-solid border border-white rounded-md w-4/5 max-w-[40rem] h-24 flex justify-center items-center bg-blue-800/50">
-        <TypeAnimation
-          sequence={[
-            1500,
-            "Hi!",
-            1000,
-            "I will teach you how to.",
-            700, 
-          ]} 
-          cursor={true}
-          wrapper="h4"
-          speed={50}
-          deletionSpeed={90}
-          className="text-s md:text-xl text-white text-left"
-        />
-      </div>
       <div className={`transition-all ${open ? "" : "translate-x-full"} absolute bottom-10 w-screen z-10 h-min flex justify-center content-between`}>
         <button onClick={() => {
           setView("landing");
