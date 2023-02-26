@@ -33,7 +33,7 @@ const Lobby = (props: LobbyProps) => {
         <h1 className="mt-6 text-4xl font-bold text-white">Lobby</h1>
         <div className="mt-2 font-bold text-white py-4">{`Your name is: ${id}, you Slimey Slime.`}</div>
         <div className="container mt-4 h-3/4">
-          <GameEngine boardSize={50} isDemo={true}>
+          <GameEngine boardSize={50} startDemo={true}>
             <GameBoard />
           </GameEngine>
         </div>
