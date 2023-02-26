@@ -7,6 +7,7 @@ const App = () => {
   const { view }  = useContext(ViewSelectorContext);
   const Landing = lazy(() => import('./views/Landing'));
   const CgolGame = lazy(() => import('./views/CgolGame'));
+  const VideoBackground = lazy(() => import('./shared_ui_components/VideoBackground'))
 
   const getView = () => {
     switch (view) {
@@ -20,11 +21,11 @@ const App = () => {
   }
 
   return (
-      <div className="animate-gradient-xy bg-gradient-to-br from-blue-800 via-slate-900 to-indigo-700 h-screen w-screen z-30 overflow-hidden">
+      <div className="h-screen w-screen overflow-hidden">
       <Suspense fallback={<LoadingIndicator/>}>
-        <video autoPlay muted loop playsInline className="opacity-20 z-0 w-full h-full absolute top-0 left-0 object-cover">
-          <source src="/app_background.mp4" type="video/mp4" />
-        </video>
+        <Suspense fallback={<div></div>}>
+          <VideoBackground />
+        </Suspense>
         { getView() }
       </Suspense>
     </div>

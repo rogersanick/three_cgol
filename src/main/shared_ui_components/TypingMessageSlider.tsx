@@ -17,9 +17,9 @@ const TypingAnimationSlides = (props: TypingAnimationSlidesProps) => {
 
   return (
     <div className="flex justify-between items-center w-full max-w-[40rem] h-fit min-h-[10rem]">
-      <button onClick={previous} className="border-solid border-2 border-white rounded-full m-4 w-8 h-8 text-s text-white">{"<"}</button>
+      <button onClick={previous} className="bg-blue-800/40 border-solid border-2 border-white rounded-full m-4 w-8 h-8 text-s text-white">{"<"}</button>
       <TypingAnimation message={messages[messageIndex]}/>
-      <button onClick={next} className="border-solid border-2 border-white rounded-full m-4 w-8 h-8 text-s text-white">{">"}</button>
+      <button onClick={next} className="bg-blue-800/40 border-solid border-2 border-white rounded-full m-4 w-8 h-8 text-s text-white">{">"}</button>
     </div>
   )
 }
@@ -60,9 +60,9 @@ const TypingAnimation: FC<TypingAnimationProps> = ({ message }) => {
   }, [message])
 
   return (
-    <div className="my-4 p-2 bg-blue-800/50 border-solid border border-white rounded-md whitespace-pre-line text-s md:text-xl text-white text-left w-4/5">
+    <div className="my-4 p-2 bg-blue-800/40 border-solid border border-white rounded-md whitespace-pre-line text-s md:text-xl text-white text-left w-4/5">
       <span>{text}</span>
-      <span>{blink ? "|" : " "}</span>
+      <span>{blink ? " |" : "  "}</span>
     </div>
   );
 };

@@ -3,7 +3,6 @@ import { gameColors } from '../../color';
 import { GameEngineContext } from '../game_engine/GameEngine';
 import { GiRabbit, GiSeaTurtle } from 'react-icons/gi';
 import { ViewSelectorContext } from '../../views/ViewContext';
-import { TypeAnimation } from 'react-type-animation';
 
 const CgolGui: React.FC = () => {
   const [open] = useState(true);
