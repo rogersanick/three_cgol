@@ -16,9 +16,9 @@ const TypingAnimationSlides = (props: TypingAnimationSlidesProps) => {
   const previous = () => setMessageIndex(messageIndex - 1 >= 0 ? messageIndex - 1 : messages.length - 1)
 
   return (
-    <div className="flex justify-between items-center w-full max-w-[40rem] h-fit min-h-[10rem]">
+    <div className="z-10 flex justify-between items-center w-full max-w-[40rem] h-fit min-h-[10rem]">
       <button onClick={previous} className="bg-blue-800/40 border-solid border-2 border-white rounded-full m-4 w-8 h-8 text-s text-white">{"<"}</button>
-      <TypingAnimation message={messages[messageIndex]}/>
+      <TypingAnimation message={messages[messageIndex] + `\n\n[${messageIndex + 1}/${messages.length}]`}/>
       <button onClick={next} className="bg-blue-800/40 border-solid border-2 border-white rounded-full m-4 w-8 h-8 text-s text-white">{">"}</button>
     </div>
   )
@@ -41,7 +41,7 @@ const TypingAnimation: FC<TypingAnimationProps> = ({ message }) => {
       } else {
         clearInterval(interval);
       }
-    }, 50);
+    }, 30);
 
     return () => clearInterval(interval);
   }, [index, message]);
@@ -60,7 +60,7 @@ const TypingAnimation: FC<TypingAnimationProps> = ({ message }) => {
   }, [message])
 
   return (
-    <div className="my-4 p-2 bg-blue-800/40 border-solid border border-white rounded-md whitespace-pre-line text-s md:text-xl text-white text-left w-4/5">
+    <div className="m-4 p-2 bg-blue-800/20 border-solid border border-white rounded-md whitespace-pre-line text-s md:text-xl text-white text-left w-11/12">
       <span>{text}</span>
       <span>{blink ? " |" : "  "}</span>
     </div>

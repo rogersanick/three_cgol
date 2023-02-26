@@ -23,7 +23,7 @@ const App = () => {
   return (
       <div className="h-screen w-screen overflow-hidden">
       <Suspense fallback={<LoadingIndicator/>}>
-        <Suspense fallback={<div></div>}>
+        <Suspense fallback={<div className="absolute -z-20 animate-gradient-xy bg-gradient-to-br from-blue-800 via-slate-900 to-indigo-700 h-screen w-screen"></div>}>
           <VideoBackground />
         </Suspense>
         { getView() }
