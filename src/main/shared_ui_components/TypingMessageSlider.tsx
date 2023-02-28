@@ -1,14 +1,15 @@
-import { FC, ReactNode, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 type TypingAnimationSlidesProps = {
   messages: (string)[];
-  children: ReactNode;
+  ctaCallback?: () => void;
+  ctaText?: string;
 }
 
 const TypingAnimationSlides = (props: TypingAnimationSlidesProps, ) => {
 
   // Get all messages from props
-  const { messages, children } = props
+  const { messages, ctaCallback, ctaText } = props
   const [messageIndex, setMessageIndex] = useState(0)
 
   // Define handlers
@@ -17,13 +18,14 @@ const TypingAnimationSlides = (props: TypingAnimationSlidesProps, ) => {
   const previous = () => setMessageIndex(messageIndex - 1 >= 0 ? messageIndex - 1 : messages.length - 1)
 
   return (
-    <div className="p-4 z-10 flex flex-col justify-between items-center w-full h-full">
+    <div className="p-8 z-10 flex flex-col justify-between items-center w-full h-full">
       <TypingAnimation message={messages[messageIndex]}/>
       <br/>
       <div className="mt-2 flex flex-row justify-between w-full">
         <button onClick={previous} className="text-s text-white">{'<'}</button>
-        { messageIndex === messages.length - 1 ? 
-          children : <span className="text-s text-white">{`${messageIndex + 1} / ${messages.length}`}</span> }
+        { messageIndex === messages.length - 1 && ctaText ? 
+          <button onClick={ctaCallback} className="px-3 animate-gradient-xy bg-gradient-to-br from-blue-800/30 via-slate-900/80 to-indigo-700/70 z-40 border-solid border-2 border-white rounded-full text-lg text-white">{ctaText}</button>
+          : <span className="text-s text-white">{`${messageIndex + 1} / ${messages.length}`}</span> }
         <button onClick={next} className="text-s text-white">{'>'}</button>
       </div>
     </div>
