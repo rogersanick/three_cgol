@@ -5,7 +5,7 @@ import AdaptivePixelRatio from "../../shared_three_components/AdaptivePixelRatio
 import { GameEngineContext } from "../game_engine/GameEngine";
 import GelatinousCube from "../../shared_three_components/GelatinousCube";
 import Lights from "../../shared_three_components/Lights";
-import { Slime, InstanceSlime } from "../../shared_three_components/Slime";
+import Slime from "../../shared_three_components/Slime";
 import { Perf } from "r3f-perf";
 
 const CgolGameBoard = () => {
@@ -91,7 +91,7 @@ const CgolGameBoard = () => {
                   
                   return <group key={`x:${xIndex}z:${zIndex}pnum:${slimePlayerNumber}`}>
                     {cubePlayerNumber !== null ? <GelatinousCube xIndex={xIndex} zIndex={zIndex} shouldDie={triggerDeathAnimation} animationDuration={animationDuration} playerIndex={slimePlayerNumber!}/> : null }
-                    {/* {slimePlayerNumber !== null ? <Slime xIndex={xIndex} zIndex={zIndex} playerIndex={slimePlayerNumber!}/> : null } */}
+                    {slimePlayerNumber !== null ? <Slime xIndex={xIndex} zIndex={zIndex} playerIndex={slimePlayerNumber!}/> : null }
                   </group>
                 })
               })

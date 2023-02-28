@@ -55,7 +55,7 @@ const Landing = () => {
         </div>
         
       </div>
-      <div className="h-2/3 w-full -mt-24 -z-10">
+      <div className="h-2/3 w-full -mt-32 -z-10">
         <GameEngine boardSize={30} startDemo={true}>
           <GameBoard />
         </GameEngine>
