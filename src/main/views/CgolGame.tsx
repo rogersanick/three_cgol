@@ -3,7 +3,7 @@ import CgolGameBoard from "../game_of_life/three_components/CgolGameBoard"
 import CgolGui from "../game_of_life/ui_components/CgolGui"
 
 const CgolGame = () => {
-  return <GameEngine boardSize={100} startDemo={false}>
+  return <GameEngine boardSize={80} startDemo={false}>
     <CgolGui />
     <CgolGameBoard />
   </GameEngine>

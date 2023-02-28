@@ -1,13 +1,14 @@
-import { FC, useEffect, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 
 type TypingAnimationSlidesProps = {
   messages: (string)[];
+  children: ReactNode;
 }
 
-const TypingAnimationSlides = (props: TypingAnimationSlidesProps) => {
+const TypingAnimationSlides = (props: TypingAnimationSlidesProps, ) => {
 
   // Get all messages from props
-  const { messages } = props
+  const { messages, children } = props
   const [messageIndex, setMessageIndex] = useState(0)
 
   // Define handlers
@@ -16,10 +17,15 @@ const TypingAnimationSlides = (props: TypingAnimationSlidesProps) => {
   const previous = () => setMessageIndex(messageIndex - 1 >= 0 ? messageIndex - 1 : messages.length - 1)
 
   return (
-    <div className="z-10 flex justify-between items-center w-full max-w-[40rem] h-fit min-h-[10rem]">
-      <button onClick={previous} className="bg-blue-800/40 border-solid border-2 border-white rounded-full m-4 w-8 h-8 text-s text-white">{"<"}</button>
-      <TypingAnimation message={messages[messageIndex] + `\n\n[${messageIndex + 1}/${messages.length}]`}/>
-      <button onClick={next} className="bg-blue-800/40 border-solid border-2 border-white rounded-full m-4 w-8 h-8 text-s text-white">{">"}</button>
+    <div className="p-4 z-10 flex flex-col justify-between items-center w-full h-full">
+      <TypingAnimation message={messages[messageIndex]}/>
+      <br/>
+      <div className="mt-2 flex flex-row justify-between w-full">
+        <button onClick={previous} className="text-s text-white">{'<'}</button>
+        { messageIndex === messages.length - 1 ? 
+          children : <span className="text-s text-white">{`${messageIndex + 1} / ${messages.length}`}</span> }
+        <button onClick={next} className="text-s text-white">{'>'}</button>
+      </div>
     </div>
   )
 }
@@ -41,7 +47,7 @@ const TypingAnimation: FC<TypingAnimationProps> = ({ message }) => {
       } else {
         clearInterval(interval);
       }
-    }, 30);
+    }, 20);
 
     return () => clearInterval(interval);
   }, [index, message]);
@@ -60,7 +66,7 @@ const TypingAnimation: FC<TypingAnimationProps> = ({ message }) => {
   }, [message])
 
   return (
-    <div className="m-4 p-2 bg-blue-800/20 border-solid border border-white rounded-md whitespace-pre-line text-s md:text-xl text-white text-left w-11/12">
+    <div className="whitespace-pre-line text-lg md:text-xl text-white text-left w-full">
       <span>{text}</span>
       <span>{blink ? " |" : "  "}</span>
     </div>

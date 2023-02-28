@@ -47,7 +47,7 @@ const LoadingIndicator = () => {
   return <div role="status" className="h-screen w-screen flex flex-col justify-center items-center absolute -z-20 animate-gradient-xy bg-gradient-to-br from-blue-800 via-slate-900 to-indigo-700">
     <img className="border-2 border-white rounded-xl animate-pulse w-24 h-24 md:w-48 md:h-48 rounded-2xl mx-auto mb-6" src="/pink_slime.png"/>
     <span className="sr-only">Loading...</span> 
-    <span className="w-5/6 h-1/6 mt-6 text-xl font-bold text-center text-white">{loadingMessages[loadingMessageIndex]}</span>
+    <span className="w-5/6 h-1/6 mt-6 text-xl text-center text-white">{loadingMessages[loadingMessageIndex]}</span>
   </div>
 }
 

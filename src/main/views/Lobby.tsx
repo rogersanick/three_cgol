@@ -63,7 +63,7 @@ const Lobby = (props: LobbyProps) => {
           setTimeout(() => {
             startGame();
           }, 500);
-        }} className="rounded-md bg-indigo-600 my-6 py-2 px-4 text-sm font-medium text-white">Start Game</button>
+        }} className="rounded-md bg-gradient-to-br from-blue-800 via-slate-900 to-indigo-700 my-6 py-2 px-4 text-sm font-medium text-white">Start Game</button>
       </div>
     </div> 
   );
