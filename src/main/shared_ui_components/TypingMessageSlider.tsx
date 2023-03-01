@@ -22,11 +22,11 @@ const TypingAnimationSlides = (props: TypingAnimationSlidesProps, ) => {
       <TypingAnimation message={messages[messageIndex]}/>
       <br/>
       <div className="mt-2 flex flex-row justify-between w-full">
-        <button onClick={previous} className="text-s text-white">{'<'}</button>
+        <button onClick={previous} className="h-8 w-8 text-s text-white bg-gradient-to-br from-blue-800/30 via-slate-900/80 to-indigo-700/70 border-solid border border-white rounded-full">{'<'}</button>
         { messageIndex === messages.length - 1 && ctaText ? 
-          <button onClick={ctaCallback} className="px-3 animate-gradient-xy bg-gradient-to-br from-blue-800/30 via-slate-900/80 to-indigo-700/70 z-40 border-solid border-2 border-white rounded-full text-lg text-white">{ctaText}</button>
+          <button onClick={ctaCallback} className="h-8 w-fit px-3 bg-gradient-to-br from-blue-800/30 via-slate-900/80 to-indigo-700/70 z-40 border-solid border border-white rounded-full text-lg text-white">{ctaText}</button>
           : <span className="text-s text-white">{`${messageIndex + 1} / ${messages.length}`}</span> }
-        <button onClick={next} className="text-s text-white">{'>'}</button>
+        <button onClick={next} className="h-8 w-8 text-s text-white bg-gradient-to-br from-blue-800/30 via-slate-900/80 to-indigo-700/70 border-solid border border-white rounded-full">{'>'}</button>
       </div>
     </div>
   )
